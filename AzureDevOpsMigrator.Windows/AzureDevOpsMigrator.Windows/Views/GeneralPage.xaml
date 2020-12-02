@@ -1,0 +1,53 @@
+﻿<Page
+    x:Class="AzureDevOpsMigrator.Windows.Views.GeneralPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AzureDevOpsMigrator.Windows"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
+    <StackPanel Margin="0,20">
+        <TextBlock Style="{StaticResource HeaderTextBlockStyle}">Migration Details</TextBlock>
+        <RichTextBlock Margin="0,20">
+            <Paragraph Margin="0,20">
+                Let's begin by naming this migration and picking a working folder. The working folder will be used to store logs, attachments and other data used during migrations.
+            </Paragraph>
+        </RichTextBlock>
+        <Grid Margin="0,50,0,50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!-- Row 1 -->
+            <StackPanel  Grid.Row="0" Grid.Column="0">
+                <TextBlock Margin="0,0,0,10">Name</TextBlock>
+                <TextBlock VerticalAlignment="Top"
+                           FontStyle="Italic" Foreground="Gray" TextWrapping="WrapWholeWords" >
+                A friendly name to describe this migration
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <TextBox Name="Text_Name" Width="275" TabIndex="0"  Height="30" Margin="5,0" Text="{x:Bind Model.CurrentConfig.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBox_TextChanged"></TextBox>
+            </StackPanel>
+
+            <!-- Row 2 -->
+            <StackPanel  Grid.Row="1" Grid.Column="0">
+                <TextBlock Margin="0,0,0,10">Working Folder</TextBlock>
+                <TextBlock FontStyle="Italic" Foreground="Gray" TextWrapping="WrapWholeWords" VerticalAlignment="Top" >
+                This will be where this migration operates from. It will contain the migration definition, logs, and temporary data used during the migration's processing.
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <TextBox TabIndex="1" Width="500" Height="30" Margin="5,0" Text="{x:Bind Model.CurrentConfig.WorkingFolder, Mode=TwoWay}" Name="Text_WorkingFolder"></TextBox>
+                <Button TabIndex="2" Width="35" Name="BtnFindWorkingFolder" Click="BtnFindWorkingFolder_Click">...</Button>
+            </StackPanel>
+        </Grid>
+        <Button Background="{StaticResource ButtonBackgroundThemeBrush}" TabIndex="3" Name="Button_Next" Click="Button_Next_Click" MinWidth="100">Next</Button>
+    </StackPanel>
+</Page>

@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="AzureDevOpsMigrator.Windows.Views.QueryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AzureDevOpsMigrator.Windows.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="450"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"></RowDefinition>
+            <RowDefinition Height="45"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="45"></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Style="{ThemeResource TitleTextBlockStyle}" VerticalAlignment="Center">Query For Work Items</TextBlock>
+        
+        <TextBox Grid.Row="1" Grid.Column="0" PlaceholderText="Add query filters here.. for example [System.State] != 'Closed'"
+                 Margin="0,0,10,10" VerticalAlignment="Center" IsSpellCheckEnabled="False"
+                 Text="{x:Bind Model.SourceQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch">
+            <Button Margin="0,0,10,10" VerticalAlignment="Center" 
+                Name="Button_Refresh" Click="Button_Refresh_Click" >
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Refresh" Margin="0,0,20,0" VerticalAlignment="Center"></SymbolIcon>
+                    <TextBlock VerticalAlignment="Center">Refresh</TextBlock>
+                </StackPanel>
+            </Button>
+            <Button Margin="0,0,10,10" VerticalAlignment="Center" HorizontalAlignment="Right"
+                Name="Button_Next" Click="Button_Next_Click">
+                <StackPanel Orientation="Horizontal">
+                    <SymbolIcon Symbol="Next" Margin="0,0,20,0" VerticalAlignment="Center"></SymbolIcon>
+                    <TextBlock VerticalAlignment="Center" Text="{x:Bind NextMessage}"></TextBlock>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <toolkit:DataGrid VerticalScrollBarVisibility="Visible" ItemsSource="{x:Bind WorkItemResults}" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Margin="0, 20, 20, 20">
+        </toolkit:DataGrid>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2">
+            <TextBlock FontWeight="ExtraBold">We found [</TextBlock>
+            <TextBlock FontWeight="ExtraBold" Foreground="{ThemeResource HyperlinkForegroundThemeBrush}" Text="{x:Bind Total}"></TextBlock>
+            <TextBlock FontWeight="ExtraBold">] work items with the above query. Previewing first 10 work items above.</TextBlock>
+        </StackPanel>
+    </Grid>
+</Page>

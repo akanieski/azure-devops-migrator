@@ -1,0 +1,100 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AzureDevOpsMigrator.Windows"
+    xmlns:custom="using:AzureDevOpsMigrator.Windows.Controls">
+
+    <Style TargetType="custom:FieldToFieldTransformationControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="custom:FieldToFieldTransformationControl">
+
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <!-- Row 0 -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">Source Field</TextBlock>
+                        <TextBox Grid.Row="0" Grid.Column="1"  Margin="5" VerticalAlignment="Center"
+                                        Text="{Binding Configuration.SourceField, Mode=TwoWay}"></TextBox>
+
+                        <!-- Row 1 -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">Target Field</TextBlock>
+                        <TextBox Grid.Row="1" Grid.Column="1"  Margin="5" VerticalAlignment="Center"
+                                        Text="{Binding Configuration.TargetField, Mode=TwoWay}"></TextBox>
+
+                        <!-- Row 2 -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">Value Match</TextBlock>
+                        <TextBox Grid.Row="2" Grid.Column="1"  Margin="5" VerticalAlignment="Center" 
+                                        PlaceholderText="Regex to match source value"
+                                        Text="{Binding Configuration.ValueExpressionMatch, Mode=TwoWay}"></TextBox>
+
+                        <!-- Row 3 -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">String Template</TextBlock>
+                        <TextBox Grid.Row="3" Grid.Column="1"  Margin="5" VerticalAlignment="Center" 
+                                        PlaceholderText="Target value template, {0} for value"
+                                        Text="{Binding Configuration.StringTemplate, Mode=TwoWay}"></TextBox>
+                    </Grid>
+
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="custom:FieldToTagTransformationControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="custom:FieldToTagTransformationControl">
+
+                    <Grid Margin="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="40"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <!-- Row 0 -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">Source Field</TextBlock>
+                        <TextBox Grid.Row="0" Grid.Column="1"  Margin="5" VerticalAlignment="Center"
+                                        Text="{Binding Configuration.SourceField, Mode=TwoWay}"></TextBox>
+
+                        <!-- Row 2 -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">Value Match</TextBlock>
+                        <TextBox Grid.Row="1" Grid.Column="1"  Margin="5" VerticalAlignment="Center" 
+                                        PlaceholderText="Regex to match source value"
+                                        Text="{Binding Configuration.ValueExpressionMatch, Mode=TwoWay}"></TextBox>
+
+                        <!-- Row 3 -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="5" 
+                                        VerticalAlignment="Center">String Template</TextBlock>
+                        <TextBox Grid.Row="2" Grid.Column="1"  Margin="5" VerticalAlignment="Center" 
+                                        PlaceholderText="Target value template, {0} for value"
+                                        Text="{Binding Configuration.StringTemplate, Mode=TwoWay}"></TextBox>
+                    </Grid>
+
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

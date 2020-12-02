@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows10.0.18362</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17134.0</TargetPlatformMinVersion>
+    <RootNamespace>AzureDevOpsMigrator.Windows</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x86;x64;arm64</Platforms>
+    <RuntimeIdentifiers>win10-x86;win10-x64;win10-arm64</RuntimeIdentifiers>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Views\EndpointPage.xaml" />
+    <None Remove="Views\GeneralPage" />
+    <None Remove="Views\GeneralPage.xaml" />
+    <None Remove="Views\NewMigrationPage.xaml" />
+    <None Remove="Views\QueryPage.xaml" />
+    <None Remove="Views\RunMigrationPage.xaml" />
+    <None Remove="Views\TransformationsPage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls" Version="8.0.0-preview3" />
+    <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls.DataGrid" Version="8.0.0-preview3" />
+    <PackageReference Include="Microsoft.VCRTForwarders.140" Version="1.0.7" />
+    <PackageReference Include="Microsoft.WinUI" Version="3.0.0-preview3.201113.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\AzureDevOpsMigrator\AzureDevOpsMigrator.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\RunMigrationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\TransformationsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Views\QueryPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\EndpointPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\NewMigrationPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Views\GettingStartedPage.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\GettingStartedPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>
