@@ -8,8 +8,8 @@
 
   <Identity
     Name="8d8ab544-a526-4399-ae09-e5b7ef939883"
-    Publisher="CN=andre"
-    Version="1.0.0.0" />
+    Publisher="CN=Azure DevOps Migration Utility"
+    Version="1.0.4.0" />
 
   <Properties>
     <DisplayName>AzureDevOpsMigrator.Windows (Package)</DisplayName>

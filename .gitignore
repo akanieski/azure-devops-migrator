@@ -2,3 +2,8 @@
 **/bin
 **/obj
 packages/
+**/AppPackages/
+**/*_TemporaryKey.pfx
+**/BundleArtifacts/
+**/*.pubxml.user
+**/*.user
