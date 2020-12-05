@@ -163,10 +163,14 @@ namespace AzureDevOpsMigrator.EndpointServices
             var wiql = new Wiql();
             wiql.Query = wiqlQuery;
             var result = (await _witClient.QueryByWiqlAsync(wiql, false, cancellationToken: token)).WorkItems;
-            List<WorkItem> batch = await _witClient.GetWorkItemsAsync(
-                    ids: result.Skip(skip).Take(top).Select(x => x.Id),
-                    cancellationToken: token);
-            return (result.Count(), batch);
+            if (result.Any())
+            {
+                List<WorkItem> batch = await _witClient.GetWorkItemsAsync(
+                        ids: result.Skip(skip).Take(top).Select(x => x.Id),
+                        cancellationToken: token);
+                return (result.Count(), batch);
+            }
+            return (0, new List<WorkItem>());
         }
 
         public async Task<WorkItem> CreateWorkItem(string projectName, WorkItem workItem, CancellationToken token, 

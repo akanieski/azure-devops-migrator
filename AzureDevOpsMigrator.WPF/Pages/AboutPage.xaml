@@ -1,0 +1,26 @@
+﻿<Page x:Class="AzureDevOpsMigrator.WPF.Pages.AboutPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="784" d:DesignWidth="1152"
+      Title="About">
+
+    <StackPanel>
+        <TextBlock Style="{StaticResource PageTitle}" Margin="0,10,0,10">About</TextBlock>
+        <TextBlock>
+            <LineBreak/><Bold>Azure DevOps <Span Foreground="CadetBlue">Migration Utility</Span></Bold> v<Run Text="{Binding Version}"/><LineBreak/><LineBreak/>
+            This tool was written to create a simple user experience for migrating work items and other entities between projects in Azure DevOps. Working directly with the Azure DevOps REST api takes work. Administrators may not have the time needed to script out migrations using the REST API. This tool aims to make that experience easier.
+            <LineBreak/><LineBreak/>
+            This tool is maintained by it's author Andrew Kanieski with the support of the community and is not an official or supported product of Microsoft. It's design and intent does not relect the views of Microsoft.
+            <LineBreak/><LineBreak/>
+            A special thanks to the teams of people that I have worked with over the years that have lent ideas and requested features that have found their way into this tool. Together as a community we can make our work easier and more enjoyable!
+            <LineBreak/><LineBreak/><LineBreak/>
+            <Bold>Open Source Credits:</Bold><LineBreak/><LineBreak/>
+            <Hyperlink NavigateUri="https://fontawesome.com/">Font-Awesome</Hyperlink><LineBreak/>
+            <Hyperlink NavigateUri="https://github.com/charri/Font-Awesome-WPF">Font-Awesome-WPF</Hyperlink>
+        </TextBlock>
+    </StackPanel>
+</Page>

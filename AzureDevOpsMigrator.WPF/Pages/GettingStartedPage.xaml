@@ -1,0 +1,31 @@
+﻿<Page x:Class="AzureDevOpsMigrator.WPF.Pages.GettingStartedPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages"
+      xmlns:main="clr-namespace:AzureDevOpsMigrator.WPF"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800" Background="White"
+      Title="GettingStartedPage">
+
+    <Grid>
+        <StackPanel Margin="0,20">
+            <TextBlock Style="{StaticResource PageTitle}">Getting Started</TextBlock>
+           
+            <TextBlock Margin="0,20" TextWrapping="Wrap">
+                
+                    Welcome to the community driven 
+                <Bold>Azure DevOps Migration Utility.</Bold><LineBreak/><LineBreak/>
+                This tool provides you an easy to use interface for migrating Work Items from one place to another. It supports both Azure DevOps Server as well as Azure DevOps Services.
+                To get started you may begin by creating a migration definition. This application will walk you through the process of configuring your migration and help you execute that migration.
+                <LineBreak/><LineBreak/>
+                    Click below to get started.
+            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <Button Margin="0,0" Name="BtnGettingStarted" Click="BtnGettingStarted_Click" >New Migration</Button>
+                <Button Margin="20,0" Name="BtnLoadExisting" Click="BtnLoadExisting_Click">Load Existing Migration Project</Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Page>

@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>logo-cadet-blue.ico</ApplicationIcon>
+    <PackageId>AzureDevOpsMigrator</PackageId>
+    <Authors>Andrew Kanieski</Authors>
+    <Company />
+    <Product>Azure DevOps Migration Utility</Product>
+    <Description>A tool to make migrating entities in Azure DevOps easier.</Description>
+    <Copyright />
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://andrewkanieski.com/post/azure-devops-migration-utility</PackageProjectUrl>
+    <PackageIcon>logo-cadet-blue.png</PackageIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FontAwesome.WPF" Version="4.7.0.9" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.WindowsAPICodePack-Shell" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AzureDevOpsMigrator\AzureDevOpsMigrator.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Common\FieldToFieldTransformationControl - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>FieldToFieldTransformationControl.xaml.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\WitPages\WitGeneralPage - Copy.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>WitGeneralPage.xaml.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Common\FieldToTagTransformationControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="logo-cadet-blue.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,95 @@
+﻿<Page x:Class="AzureDevOpsMigrator.WPF.Pages.WitPages.WitTransformationsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages.WitPages"
+      xmlns:common="clr-namespace:AzureDevOpsMigrator.WPF.Common"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:main="clr-namespace:AzureDevOpsMigrator.WPF"
+      mc:Ignorable="d" Loaded="Page_Loaded"
+      d:DesignHeight="784" d:DesignWidth="1152"
+      Title="WitTransformationsPage">
+    <Page.Resources>
+        <main:NullVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Background="White" 
+             DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:WitTransformationsPage}}"
+             d:DataContext="{d:DesignInstance Type=local:WitTransformationsPage, IsDesignTimeCreatable=True}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="350"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border BorderBrush="Silver" BorderThickness="1" Margin="0,0,10,0">
+                <StackPanel>
+                    <Menu Height="40" VerticalContentAlignment="Center" BorderBrush="DarkGray" BorderThickness="0,0,0,1">
+                        <MenuItem Header="_Add" Height="40" Margin="10,0,10,0">
+                            <MenuItem Click="Menu_AddFieldToField" Header="Add Field to Field Transformation .."/>
+                            <MenuItem Click="Menu_AddFieldToTag" Header="Add Field to Tag Transformation .."/>
+                        </MenuItem>
+                        <MenuItem Header="_Remove" Height="40" Click="Menu_RemoveTransformation"/>
+                    </Menu>
+                    <ListView BorderBrush="Silver" BorderThickness="0,1,0,0" 
+                                  ItemsSource="{Binding Model.Transformations}" 
+                                  SelectionChanged="ListView_Transformations_SelectionChanged"
+                                  Name="ListView_Transformations">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Height="40">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"></ColumnDefinition>
+                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <fa:FontAwesome Icon="ChevronRight" Foreground="Silver" Margin="0,5,0,0" VerticalAlignment="Center"></fa:FontAwesome>
+                                    <TextBlock Text="{Binding Display}" Grid.Column="1" VerticalAlignment="Center"></TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+            <Grid Margin="10,0,0,0" Grid.Column="1">
+                <Border BorderBrush="Silver" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Background="Silver" HorizontalAlignment="Stretch" Margin="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Border CornerRadius="20" BorderThickness="1" BorderBrush="DimGray" Width="25" Height="25" Grid.Column="0"
+                                               Visibility="{Binding CurrentTransformVisibility}">
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="DimGray" FontWeight="Normal"
+                                                   Text="{Binding CurrentTransformationIndex}" />
+                            </Border>
+                            <TextBlock Grid.Column="1" Margin="20,10" HorizontalAlignment="Left"
+                                               Foreground="DimGray"
+                                               Visibility="{Binding CurrentTransformVisibility}"
+                                               VerticalAlignment="Stretch" Text="{Binding CurrentTransformationType}"/>
+
+                            <Button BorderThickness="0" Width="25" Height="25" Grid.Column="2" Padding="0" Background="Transparent" 
+                                            Name="Button_DeleteTransformation" Click="Menu_RemoveTransformation"
+                                               Visibility="{Binding CurrentTransformVisibility}">
+                            </Button>
+                        </Grid>
+                        <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10,0,10,0">
+                            <common:FieldToFieldTransformationControl Configuration="{Binding CurrentFieldToField}" 
+                                           Visibility="{Binding FieldToFieldVisible}" 
+                                           HorizontalContentAlignment="Stretch" MinWidth="400" />
+                            <common:FieldToTagTransformationControl Configuration="{Binding CurrentFieldToTag}" 
+                                           Visibility="{Binding FieldToTagVisible}" 
+                                           HorizontalContentAlignment="Stretch" MinWidth="400" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+            
+        </Grid>
+    </Grid>
+</Page>

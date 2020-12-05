@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="AzureDevOpsMigrator.WPF.Common.NavButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Common"
+             mc:Ignorable="d" Name="ThisControl"
+             d:DesignHeight="30" d:DesignWidth="250">
+    <Grid
+             DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:NavButton}}"
+             d:DataContext="{d:DesignInstance Type=local:NavButton, IsDesignTimeCreatable=True}">
+        <Button Height="30" Padding="10,0" Name="Button" Click="Button_Click">
+            <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Width="10" Height="10" Background="Silver" BorderBrush="DarkSlateGray" BorderThickness="2"></Border>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="{Binding Label}" Name="Text_Label"></TextBlock>
+        </Grid>
+    </Button>
+    </Grid>
+</UserControl>
