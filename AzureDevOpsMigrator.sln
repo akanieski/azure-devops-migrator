@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "AzureDevOpsMigrator.Windows (Package)", "AzureDevOpsMigrator.Windows\AzureDevOpsMigrator.Windows (Package)\AzureDevOpsMigrator.Windows (Package).wapproj", "{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsMigrator.Windows", "AzureDevOpsMigrator.Windows\AzureDevOpsMigrator.Windows\AzureDevOpsMigrator.Windows.csproj", "{82604CA7-9F05-4800-B750-C7B43A7CA38F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDevOpsMigrator.WPF", "AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj", "{D8B9BCEA-3BDD-4868-B3BE-CEE52CB2B586}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AzureDevOpsMigrator", "AzureDevOpsMigrator\AzureDevOpsMigrator.csproj", "{99DB7044-DA8D-4E64-A8CB-0361940C2564}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureDevOpsMigrator.WPF", "AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj", "{D8B9BCEA-3BDD-4868-B3BE-CEE52CB2B586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,40 +19,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|arm64.ActiveCfg = Debug|arm64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|arm64.Build.0 = Debug|arm64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|arm64.Deploy.0 = Debug|arm64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|x64.ActiveCfg = Debug|x64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|x64.Build.0 = Debug|x64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|x64.Deploy.0 = Debug|x64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|x86.ActiveCfg = Debug|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|x86.Build.0 = Debug|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Debug|x86.Deploy.0 = Debug|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|Any CPU.ActiveCfg = Release|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|arm64.ActiveCfg = Release|arm64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|arm64.Build.0 = Release|arm64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|arm64.Deploy.0 = Release|arm64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|x64.ActiveCfg = Release|x64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|x64.Build.0 = Release|x64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|x64.Deploy.0 = Release|x64
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|x86.ActiveCfg = Release|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|x86.Build.0 = Release|x86
-		{D6CABAB6-881F-4ED0-A919-7AE145CEAB8A}.Release|x86.Deploy.0 = Release|x86
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|arm64.ActiveCfg = Debug|arm64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|arm64.Build.0 = Debug|arm64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|x64.ActiveCfg = Debug|x64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|x64.Build.0 = Debug|x64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|x86.ActiveCfg = Debug|x86
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Debug|x86.Build.0 = Debug|x86
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|Any CPU.ActiveCfg = Release|x86
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|arm64.ActiveCfg = Release|arm64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|arm64.Build.0 = Release|arm64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|x64.ActiveCfg = Release|x64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|x64.Build.0 = Release|x64
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|x86.ActiveCfg = Release|x86
-		{82604CA7-9F05-4800-B750-C7B43A7CA38F}.Release|x86.Build.0 = Release|x86
 		{99DB7044-DA8D-4E64-A8CB-0361940C2564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{99DB7044-DA8D-4E64-A8CB-0361940C2564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99DB7044-DA8D-4E64-A8CB-0361940C2564}.Debug|arm64.ActiveCfg = Debug|Any CPU
