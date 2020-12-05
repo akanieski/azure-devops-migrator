@@ -1,0 +1,161 @@
+﻿<Window x:Class="AzureDevOpsMigrator.WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF"
+        mc:Ignorable="d" MouseDown="Window_MouseDown" Background="Transparent"
+         Height="864" Width="1152"  MinHeight="864" MinWidth="1152"
+        Title="Azure DevOps Migration Utility" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
+    <Grid>
+
+
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="0,0,1,0" BorderBrush="{StaticResource PanelBorder}" Background="{StaticResource PanelBackground}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="70"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Vertical">
+                        <Grid Height="160" Margin="0,30,0,20">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="60"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <fa:FontAwesome Icon="Random" Margin="0,20" Foreground="CadetBlue"
+                                                FontSize="60" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+                            <TextBlock Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center" Margin="10,0,10,1" Style="{StaticResource NavTitle}">
+                            Azure DevOps <LineBreak/><Bold>Migration Utility</Bold>
+                            </TextBlock>
+                        </Grid>
+                        <Button Margin="0,30,0,0" Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" 
+                                Style="{Binding GettingStartedPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_GettingStarted_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="Home" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Getting Started"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" 
+                                Style="{Binding HistoryPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_History_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="History" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="History"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Border Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}" BorderBrush="Black" BorderThickness="0,1,0,0" Margin="60,50,60,10"></Border>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}"
+                                Style="{Binding GeneralPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_General_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="FileOutline" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="General Details"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}"  Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}"
+                                Style="{Binding SourceEndpointPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_SourceEndpoint_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="Globe" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Source Endpoint"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}"  Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}"
+                                Style="{Binding WorkItemsPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_WorkItems_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="List" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Work Items"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}"  Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}"
+                                Style="{Binding TargetEndpointPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_TargetEndpoint_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="Globe" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Target Endpoint"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}"  Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}"
+                                Style="{Binding RunMigrationPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_RunMigration_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="Bolt" Width="30" Height="30"
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Run Migration"></TextBlock>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Name="Footer" Orientation="Vertical" Grid.Row="1">
+                        <Button Margin="0,0,0,0" Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" Click="Nav_ReportFeedback_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="Reply" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Report Feedback"></TextBlock>
+                            </Grid>
+                        </Button>
+                        <Button Margin="0,0,0,0" Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" 
+                                Style="{Binding AboutPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_About_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="Info" Width="30" Height="30" 
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="About"></TextBlock>
+                            </Grid>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            <Frame Name="AppFrame" Grid.Column="1" Margin="40,20" NavigationUIVisibility="Hidden">
+
+            </Frame>
+        </Grid>
+    </Grid>
+</Window>

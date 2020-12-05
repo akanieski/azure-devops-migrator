@@ -1,0 +1,125 @@
+﻿<Page x:Class="AzureDevOpsMigrator.WPF.Pages.EndpointPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages"
+                 xmlns:clr="clr-namespace:System;assembly=mscorlib"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      mc:Ignorable="d" Loaded="Page_Loaded"
+      d:DesignHeight="784" d:DesignWidth="1152"
+      Title="EndpointPage">
+    <Page.Resources>
+        <clr:String x:Key="DefaultTitle">Endpoint Configuration</clr:String>
+    </Page.Resources>
+    <StackPanel Margin="0,20">
+        <TextBlock Style="{StaticResource PageTitle}" Text="{Binding PageTitle, TargetNullValue={StaticResource DefaultTitle}}"></TextBlock>
+        <TextBlock Margin="0,20">
+            Now we can configure where we are migrating from. Using the form below please configure the connection info for the instance of Azure DevOps you will be pulling from.
+        </TextBlock>
+        <Grid Margin="0,50,0,50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+                <RowDefinition Height="90"></RowDefinition>
+                <RowDefinition Height="70"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <!-- Row 1 -->
+            <StackPanel  Grid.Row="0" Grid.Column="0">
+                <TextBlock Margin="0,0,0,10">Endpoint Type</TextBlock>
+                <TextBlock VerticalAlignment="Top" Name="Text_Name"
+                           FontStyle="Italic" Foreground="Gray" TextWrapping="Wrap" >
+                    <!-- Help Text Here -->
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <ComboBox Width="275"  Height="30" Margin="5,0" Name="Combo_EndpointType" SelectionChanged="Combo_EndpointType_SelectionChanged">
+                    <ComboBoxItem IsSelected="True">RestEndpointService</ComboBoxItem>
+                    <!--<ComboBoxItem>File System Endpoint</ComboBoxItem>-->
+                </ComboBox>
+            </StackPanel>
+
+            <!-- Row 2 -->
+            <StackPanel  Grid.Row="1" Grid.Column="0">
+                <TextBlock Margin="0,0,0,30">Endpoint Uri</TextBlock>
+                <!--<RichTextBlock FontStyle="Italic" Foreground="LightSeaGreen" TextWrapping="WrapWholeWords" VerticalAlignment="Top" Margin="20,0">
+                    <Paragraph Margin="0, 20">
+                        For Azure DevOps
+                        <Bold>Services</Bold> it will look like
+                        <Bold>https://dev.azure.com/test-organization</Bold>
+                    </Paragraph>
+                    <Paragraph>
+                        For Azure DevOps
+                        <Bold>Server</Bold> it will look like
+                        <Bold>https://your_app_server/tfs/DefaultCollection</Bold>
+                    </Paragraph>
+                </RichTextBlock>-->
+            </StackPanel>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <TextBox Width="500" Height="35" Margin="5,0" Text="{Binding Model.EndpointUri, Mode=TwoWay}" Name="Text_EndpointUri"></TextBox>
+            </StackPanel>
+
+            <!-- Row 3 -->
+            <StackPanel  Grid.Row="2" Grid.Column="0">
+                <TextBlock Margin="0,0,0,10">Personal Access Token</TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Left">
+                <TextBox Margin="5,0" Width="400" Height="35" Text="{Binding Model.PersonalAccessToken, Mode=TwoWay}" HorizontalContentAlignment="Left"
+                         Name="Text_PersonalAccesToken" TextChanged="ResetTestOn_TextChanged"
+                         LostFocus="Text_PersonalAccesToken_LostFocus"></TextBox>
+                <Button Name="Button_GeneratePat" Click="Button_GeneratePat_Click" FontSize="11" Margin="5,0" Style="{StaticResource Hyperlink}" >
+                    Generate One
+                </Button>
+            </StackPanel>
+
+            <!-- Row 4 -->
+            <StackPanel  Grid.Row="3" Grid.Column="0">
+                <TextBlock Margin="0,0,0,10">Project</TextBlock>
+                <TextBlock VerticalAlignment="Top"
+                           FontStyle="Italic" Foreground="Gray" TextWrapping="Wrap" >
+                    <!-- Help Text Here -->
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                <ComboBox Name="Suggest_Project" Width="275"  Height="35" Margin="5,0"
+                        DisplayMemberPath="Name" ItemsSource="{Binding Projects}"
+                        SelectedValuePath="Name" Text="{Binding Model.ProjectName, Mode=TwoWay}"
+                        IsTextSearchEnabled="False" IsEditable="True"
+                        PreviewTextInput="PreviewTextInput_EnhanceComboSearch"
+                        PreviewKeyUp="PreviewKeyUp_EnhanceComboSearch"
+                        DataObject.Pasting="Pasting_EnhanceComboSearch"
+                          SelectedValue="{Binding Model.ProjectName, Mode=TwoWay}">
+                </ComboBox>
+                <Button Width="40" Name="Button_LoadProjects" Click="Button_LoadProjects_Click">
+                    <fa:FontAwesome Icon="Refresh"></fa:FontAwesome>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+        <StackPanel Orientation="Horizontal">
+            <Button Name="Button_Next" Click="Button_Next_Click" MinWidth="100" Margin="20,0">Next</Button>
+            <Button Name="Button_Test" Click="Button_Test_Click" MinWidth="100" IsEnabled="{Binding TestLoading, Mode=OneWay}">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <fa:FontAwesome VerticalAlignment="Center" Icon="Check" Foreground="Green" Margin="0,0,10,0" Visibility="{Binding ConnectionSuccessful, Mode=OneWay}"/>
+                    <fa:FontAwesome VerticalAlignment="Center" Icon="ExclamationCircle" Foreground="DarkRed" Margin="0,0,10,0" Visibility="{Binding ConnectionFailed, Mode=OneWay}"/>
+                    <TextBlock VerticalAlignment="Center">Test Connection</TextBlock>
+                </StackPanel>
+            </Button>
+            <TextBlock VerticalAlignment="Center" Margin="10,0" Foreground="DarkRed" Text="{Binding FailureMessage}"></TextBlock>
+            <TextBlock VerticalAlignment="Center" Margin="10,0" Foreground="Green" Text="{Binding SuccessMessage}"></TextBlock>
+            <!--<TeachingTip x:Name="Tip_ConnectionError"
+	            Target="{Binding Button_Test}"
+	            Title="Error"
+	            Subtitle="{Binding FailureMessage}">
+                <TeachingTip.IconSource>
+                    <SymbolIconSource Symbol="Important"/>
+                </TeachingTip.IconSource>
+            </TeachingTip>-->
+        </StackPanel>
+    </StackPanel>
+</Page>
