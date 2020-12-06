@@ -72,16 +72,19 @@ namespace AzureDevOpsMigrator.WPF
         public static IServiceProvider ServiceProvider { get; set; }
         public static void InitializeHost()
         {
-            var host = new HostBuilder()
-                        .ConfigureHostConfiguration(c =>
-                        {
+            if (ServiceProvider == null)
+            {
+                var host = new HostBuilder()
+                            .ConfigureHostConfiguration(c =>
+                            {
 
-                        })
-                        .ConfigureServices((c, x) => ConfigureServices(c, x))
-                        .Build();
+                            })
+                            .ConfigureServices((c, x) => ConfigureServices(c, x))
+                            .Build();
 
-            //Save our service provider so we can use it later.
-            ServiceProvider = host.Services;
+                //Save our service provider so we can use it later.
+                ServiceProvider = host.Services;
+            }
         }
 
         static void ConfigureServices(HostBuilderContext ctx, IServiceCollection services)
@@ -99,6 +102,7 @@ namespace AzureDevOpsMigrator.WPF
 
         public static void SaveModel()
         {
+            CurrentModel.CurrentConfig.WorkingFolder = Path.GetFullPath(CurrentModel.CurrentConfig.WorkingFolder);
             Directory.CreateDirectory(CurrentModel.CurrentConfig.WorkingFolder);
             var path = Path.Combine(CurrentModel.CurrentConfig.WorkingFolder, $"{CurrentModel.CurrentConfig.Name}.miproj");
             File.WriteAllText(path, JsonConvert.SerializeObject(CurrentModel.CurrentConfig, new JsonSerializerSettings()

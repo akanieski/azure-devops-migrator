@@ -24,7 +24,14 @@ namespace AzureDevOpsMigrator.WPF.Pages
         public GeneralPage()
         {
             InitializeComponent();
+            Unloaded += GeneralPage_Unloaded;
             DataContext = this;
+        }
+
+        private void GeneralPage_Unloaded(object sender, RoutedEventArgs e)
+        {
+            Model.CurrentConfig.WorkingFolder = Path.GetFullPath(Model.CurrentConfig.WorkingFolder);
+
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -49,7 +56,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
 
             if (result == CommonFileDialogResult.Ok)
             {
-                Model.CurrentConfig.WorkingFolder = dialog.FileName;
+                Model.CurrentConfig.WorkingFolder = Path.GetFullPath(dialog.FileName);
                 Text_WorkingFolder.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             }
         }

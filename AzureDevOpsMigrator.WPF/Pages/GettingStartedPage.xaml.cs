@@ -41,6 +41,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
 
         private void BtnGettingStarted_Click(object sender, RoutedEventArgs e)
         {
+            MainWindow.InitializeHost();
             MainWindow.CurrentModel.CurrentConfig = new Models.MigrationConfig();
             MainWindow.NavigateTo<GeneralPage>();
         }
