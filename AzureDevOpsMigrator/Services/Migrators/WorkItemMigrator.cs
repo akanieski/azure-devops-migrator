@@ -212,12 +212,15 @@ namespace AzureDevOpsMigrator.Migrators
             if (existing?.Rev < currentRevision.Rev)
             {
                 // It needs updating in the target
-                return await _fastForward(currentRevision, existing, existing.Rev.Value, token, existing.Id);
+                var result = await _fastForward(currentRevision, existing, existing.Rev.Value, token, existing.Id);
+                ReportCount(1, SyncState.Update, EntityType.WorkItem);
+                return result;
             }
             else if (existing?.Rev == currentRevision.Rev)
             {
                 // It matches in the target
                 _log.LogInformation($"Work item #{currentId} already synced to work item #{existing.Id}:{existing.Rev}.");
+                ReportCount(1, SyncState.Matching, EntityType.WorkItem);
                 return existing;
             }
             else if (existing?.Rev > currentRevision.Rev)
@@ -227,7 +230,9 @@ namespace AzureDevOpsMigrator.Migrators
             else
             {
                 // It's a straight create operation
-                return await _fastForward(currentRevision, null, 0, token);
+                var result = await _fastForward(currentRevision, null, 0, token);
+                ReportCount(1, SyncState.Create, EntityType.WorkItem);
+                return result;
             }
         }
 

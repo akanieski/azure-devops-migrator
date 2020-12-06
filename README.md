@@ -1,6 +1,7 @@
 ![Logo](https://github.com/akanieski/azure-devops-migrator/blob/main/AzureDevOpsMigrator.WPF/logo-cadet-blue.png?raw=true)
+
 # Azure DevOps Migration Utility
-The **Azure DevOps Migration Utility** is a easy to use tool for migrating entities 
+The **Azure DevOps Migration Utility** is an easy to use tool for migrating entities 
 in Azure DevOps between projects, collections and even between on-prem Azure DevOps Server and Azure DevOps Services!
 
 The overall goal of the tool is provide a *simple* user experience that Azure DevOps administrators and users can use

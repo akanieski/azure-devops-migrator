@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages"
-      xmlns:main="clr-namespace:AzureDevOpsMigrator.WPF"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800" Background="White"
       Title="GettingStartedPage">
@@ -21,11 +21,52 @@
                 To get started you may begin by creating a migration definition. This application will walk you through the process of configuring your migration and help you execute that migration.
                 <LineBreak/><LineBreak/>
                     Click below to get started.
+                <LineBreak/>
             </TextBlock>
-            <StackPanel Orientation="Horizontal">
-                <Button Margin="0,0" Name="BtnGettingStarted" Click="BtnGettingStarted_Click" >New Migration</Button>
-                <Button Margin="20,0" Name="BtnLoadExisting" Click="BtnLoadExisting_Click">Load Existing Migration Project</Button>
-            </StackPanel>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Margin="40,20,0,0" Grid.Column="1">
+                    <TextBlock Text="Recent Migrations" Style="{StaticResource Header}"/>
+                    <ItemsControl ItemsSource="{Binding RecentMigrations}" Margin="0,10,0,10">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <fa:FontAwesome Cursor="Hand" Icon="ChevronRight" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <TextBlock Cursor="Hand" Text="{Binding Value}" PreviewMouseDown="Button_Open_Migration" FontSize="18" Tag="{Binding}"/>
+                                    <fa:FontAwesome Cursor="Hand" Icon="Close" Foreground="Salmon" VerticalAlignment="Center" FontSize="20" Margin="10,2,0,0" 
+                                                        Tag="{Binding}" PreviewMouseDown="Button_Remove_Recent" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <TextBlock Text="No recent migrations found." Visibility="{Binding RecentMigrationsVisible}"/>
+                </StackPanel>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Stretch">
+                    <Button Margin="0,30,0,10" Name="BtnGettingStarted" Click="BtnGettingStarted_Click" Height="75" Cursor="Hand" HorizontalContentAlignment="Left" Padding="40,0,0,0">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <fa:FontAwesome Icon="PlusCircle" VerticalAlignment="Center" Margin="0,3,10,0" FontSize="30" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center">New Migration</TextBlock>
+                        </Grid>
+                    </Button>
+                    <Button Margin="0,10" Name="BtnLoadExisting" Click="BtnLoadExisting_Click" Height="75" Cursor="Hand" HorizontalContentAlignment="Left" Padding="40,0,0,0">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <fa:FontAwesome Icon="FolderOpen" VerticalAlignment="Center" Margin="0,3,10,0" FontSize="30" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center">Existing Migration</TextBlock>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </StackPanel>
     </Grid>
 </Page>

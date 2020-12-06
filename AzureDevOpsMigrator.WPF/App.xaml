@@ -5,7 +5,12 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <!-- Colors -->
+        <SolidColorBrush x:Key="DarkColor" Color="#FF2B3636"/>
+        
+        
         <Style TargetType="TextBlock" x:Key="CustomTab">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="Margin" Value="10,0"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="Cursor" Value="Hand" />
@@ -25,20 +30,31 @@
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="AccordionHeader">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style TargetType="TextBlock" x:Key="Header">
+            <Setter Property="Foreground" Value="CadetBlue"/>
+            <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
-            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontSize" Value="20" />
             <Setter Property="TextWrapping" Value="Wrap" />
         </Style>
         <Style TargetType="MenuItem">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="16" />
         </Style>
         <Style TargetType="TextBox" >
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Padding" Value="5,7" />
@@ -47,6 +63,7 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="FontSize" Value="16" />
             <Setter Property="Padding" Value="5,7" />
@@ -54,12 +71,14 @@
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
         <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="Padding" Value="10" />
+            <Setter Property="BorderBrush" Value="{StaticResource DarkColor}"/>
         </Style>
         <Style x:Key="PageTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="30"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
@@ -73,16 +92,16 @@
             <Setter Property="Height" Value="Auto"/>
             <Setter Property="Width" Value="Auto"/>
             <Setter Property="Foreground" Value="DarkCyan"/>
-            <Setter Property="FontStyle" Value="Italic"/>
             <Setter Property="Cursor" Value="Hand"></Setter>
         </Style>
         <Style x:Key="NavTitle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="22"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="TextWrapping" Value="Wrap"/>
             <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
         <Style x:Key="NavButton" TargetType="Button">
+            <Setter Property="Foreground" Value="{StaticResource DarkColor}"/>
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="0,10"/>

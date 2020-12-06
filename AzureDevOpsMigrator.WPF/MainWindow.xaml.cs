@@ -27,6 +27,8 @@ using AzureDevOpsMigrator.Services;
 using AzureDevOpsMigrator.Migrators;
 using AzureDevOpsMigrator.EndpointServices;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
+using System.Collections.Specialized;
 
 namespace AzureDevOpsMigrator.WPF
 {
@@ -98,10 +100,16 @@ namespace AzureDevOpsMigrator.WPF
         public static void SaveModel()
         {
             Directory.CreateDirectory(CurrentModel.CurrentConfig.WorkingFolder);
-            File.WriteAllText(Path.Combine(CurrentModel.CurrentConfig.WorkingFolder, $"{CurrentModel.CurrentConfig.Name}.miproj"), JsonConvert.SerializeObject(CurrentModel.CurrentConfig, new JsonSerializerSettings()
+            var path = Path.Combine(CurrentModel.CurrentConfig.WorkingFolder, $"{CurrentModel.CurrentConfig.Name}.miproj");
+            File.WriteAllText(path, JsonConvert.SerializeObject(CurrentModel.CurrentConfig, new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented
             }));
+            if (!Properties.Settings.Default.RecentMigrations.Contains(path))
+            {
+                Properties.Settings.Default.RecentMigrations.Add(path);
+            }
+            Properties.Settings.Default.Save();
         }
         public static void LoadModel(string path = null)
         {
@@ -130,6 +138,7 @@ namespace AzureDevOpsMigrator.WPF
             CurrentPage = parameters.Count() == 0 ? Activator.CreateInstance(typeof(TPage)) as Page  : Activator.CreateInstance(typeof(TPage), parameters) as Page;
             _currentInstance.AppFrame.Navigate(CurrentPage);
             _currentInstance._PageChanged();
+            _currentInstance.Title = _currentInstance.CustomTitle;
         }
 
         #region Nav Styles ...
@@ -146,8 +155,12 @@ namespace AzureDevOpsMigrator.WPF
         public Visibility ShownWhileEditing => CurrentModel.CurrentConfig != null ? Visibility.Visible : Visibility.Collapsed;
         #endregion
 
+        public string Version => $"v{Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version}";
+        public string CustomTitle => $"Azure DevOps Migration Utility {(CurrentModel?.CurrentConfig != null ? "- " + CurrentModel.CurrentConfig.Name : "")}";
+
         private void _PageChanged()
         {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Title"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentPage"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceEndpointPageStyle"));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetEndpointPageStyle"));
@@ -176,6 +189,7 @@ namespace AzureDevOpsMigrator.WPF
         {
             InitializeComponent();
             DataContext = this;
+            Title = CustomTitle;
             _currentInstance = this;
             _activeNavButtonStyle = Application.Current.FindResource("NavButtonActive") as Style;
             __navButtonStyle = Application.Current.FindResource("NavButton") as Style;
@@ -200,7 +214,18 @@ namespace AzureDevOpsMigrator.WPF
 
         private void Nav_ReportFeedback_Clicked(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/akanieski/azure-devops-migrator/issues/new/choose");
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("cmd", "/C start https://github.com/akanieski/azure-devops-migrator/issues/new/choose")
+            {
+                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = true
+            });
+        }
+
+        private void Nav_CLoseMigration_Clicked(object sender, RoutedEventArgs e)
+        {
+            NavigateTo<GettingStartedPage>();
+            CurrentModel.CurrentConfig = null;
         }
     }
 

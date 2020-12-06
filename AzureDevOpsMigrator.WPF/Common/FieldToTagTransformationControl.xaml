@@ -12,7 +12,7 @@
              DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:FieldToTagTransformationControl}}"
              d:DataContext="{d:DesignInstance Type=local:FieldToTagTransformationControl, IsDesignTimeCreatable=True}">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MaxWidth="200"></ColumnDefinition>
+            <ColumnDefinition Width="*" MaxWidth="150"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>

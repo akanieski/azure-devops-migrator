@@ -57,6 +57,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
             {
                 CurrentCount += eventArgs.Increment;
                 Bar_Progress.Value = CurrentCount;
+                System.Diagnostics.Debug.WriteLine($"{CurrentCount}/{CurrentMax}");
                 Logs.Add(eventArgs);
             });
         }
@@ -70,6 +71,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
         }
         private void ScrollTop() => Dispatcher.Invoke(() => Scroll_Log.ScrollToVerticalOffset(0));
         private void ScrollBottom() => Dispatcher.Invoke(() => Scroll_Log.ScrollToVerticalOffset(Scroll_Log.ScrollableHeight));
+        
         private void RefreshBindings()
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RunShown)));
@@ -85,29 +87,33 @@ namespace AzureDevOpsMigrator.WPF.Pages
             if (!IsRunning.HasValue || IsRunning.Value == false)
             {
                 IsRunning = true;
+                Logs.Clear();
                 _cancellationTokenSource = new CancellationTokenSource();
                 var _ = Task.Run(async () =>
                 {
                     try
                     {
                         Plan = await _orchestrator.BuildMigrationPlan(CancellationToken.None);
-                        Dispatcher.Invoke(() => ResetProgressBar());
+                        await Dispatcher.InvokeAsync(() => ResetProgressBar());
                         RefreshBindings();
                         await _orchestrator.ExecuteAsync(Plan, _cancellationTokenSource.Token);
                         IsRunning = false;
                         RefreshBindings();
+                        await Task.Delay(500);
                         ScrollBottom();
                     }
                     catch (OperationCanceledException opCanceledEx)
                     {
                         IsRunning = false;
                         RefreshBindings();
+                        await Task.Delay(500);
                         ScrollBottom();
                     }
                     catch (Exception ex)
                     {
                         IsRunning = false;
                         RefreshBindings();
+                        await Task.Delay(500);
                         ScrollBottom();
                     }
                 });
@@ -118,6 +124,8 @@ namespace AzureDevOpsMigrator.WPF.Pages
         {
             CurrentCount = 0;
             Bar_Progress.Maximum = (Plan?.WorkItemsCount ?? 0) + (Plan?.AreaPathsCount ?? 0) + (Plan?.IterationsCount ?? 0);
+            CurrentMax = (int)Bar_Progress.Maximum;
+            Text_Progress.Text = $"{CurrentCount}/{CurrentMax}";
             Bar_Progress.Value = 0;
             Bar_Progress.Minimum = 0;
         }

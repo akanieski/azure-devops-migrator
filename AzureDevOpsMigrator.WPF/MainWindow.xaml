@@ -6,8 +6,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF"
         mc:Ignorable="d" MouseDown="Window_MouseDown" Background="Transparent"
-         Height="864" Width="1152"  MinHeight="864" MinWidth="1152"
-        Title="Azure DevOps Migration Utility" WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
+        Height="864" Width="1152"  MinHeight="864" MinWidth="1152"
+        WindowStartupLocation="CenterScreen" WindowStyle="SingleBorderWindow">
     <Grid>
 
 
@@ -20,19 +20,21 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="70"></RowDefinition>
+                        <RowDefinition Height="100"></RowDefinition>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Vertical">
-                        <Grid Height="160" Margin="0,30,0,20">
+                        <Grid Height="200" Margin="0,30,0,20">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="60"></RowDefinition>
+                                <RowDefinition Height="30"></RowDefinition>
                             </Grid.RowDefinitions>
                             <fa:FontAwesome Icon="Random" Margin="0,20" Foreground="CadetBlue"
                                                 FontSize="60" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
                             <TextBlock Grid.Row="1" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center" Margin="10,0,10,1" Style="{StaticResource NavTitle}">
                             Azure DevOps <LineBreak/><Bold>Migration Utility</Bold>
                             </TextBlock>
+                            <TextBlock Text="{Binding Version}" Grid.Row="2" HorizontalAlignment="Center" Foreground="Gray" FontSize="12" />
                         </Grid>
                         <Button Margin="0,30,0,0" Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" 
                                 Style="{Binding GettingStartedPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_GettingStarted_Clicked">
@@ -44,19 +46,6 @@
                                 <fa:FontAwesome Icon="Home" Width="30" Height="30" 
                                                 FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Getting Started"></TextBlock>
-                            </Grid>
-                        </Button>
-                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" 
-                                Style="{Binding HistoryPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_History_Clicked">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="30"></ColumnDefinition>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <fa:FontAwesome Icon="History" Width="30" Height="30" 
-                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
-
-                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="History"></TextBlock>
                             </Grid>
                         </Button>
                         <Border Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}" BorderBrush="Black" BorderThickness="0,1,0,0" Margin="60,50,60,10"></Border>
@@ -125,9 +114,22 @@
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Run Migration"></TextBlock>
                             </Grid>
                         </Button>
+                        <Button Height="30" Padding="30,0" d:Style="{StaticResource NavButton}"  Visibility="{Binding Model.DependsOnCurrentConfigBeingSet}"
+                                Style="{Binding RunMigrationPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_CLoseMigration_Clicked">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="30"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <fa:FontAwesome Icon="WindowCloseOutline" Width="30" Height="30"
+                                                FontSize="16" TextAlignment="Center" Padding="0,7,0,0" Grid.Column="0"/>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Close Migration"></TextBlock>
+                            </Grid>
+                        </Button>
                     </StackPanel>
                     <StackPanel Name="Footer" Orientation="Vertical" Grid.Row="1">
-                        <Button Margin="0,0,0,0" Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" Click="Nav_ReportFeedback_Clicked">
+                        <Button Margin="0,10,0,0" Height="30" Padding="30,0" Style="{StaticResource NavButton}" Click="Nav_ReportFeedback_Clicked">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="30"></ColumnDefinition>
@@ -138,8 +140,7 @@
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="10,0,10,1" Text="Report Feedback"></TextBlock>
                             </Grid>
                         </Button>
-                        <Button Margin="0,0,0,0" Height="30" Padding="30,0" d:Style="{StaticResource NavButton}" 
-                                Style="{Binding AboutPageStyle, TargetNullValue={StaticResource NavButton}}" Click="Nav_About_Clicked">
+                        <Button Margin="0,10,0,0" Height="30" Padding="30,0" Style="{StaticResource NavButton}" Click="Nav_About_Clicked">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="30"></ColumnDefinition>
@@ -153,7 +154,7 @@
                     </StackPanel>
                 </Grid>
             </Border>
-            <Frame Name="AppFrame" Grid.Column="1" Margin="40,20" NavigationUIVisibility="Hidden">
+            <Frame Name="AppFrame" Grid.Column="1" Margin="40,20" NavigationUIVisibility="Hidden" Focusable="False">
 
             </Frame>
         </Grid>

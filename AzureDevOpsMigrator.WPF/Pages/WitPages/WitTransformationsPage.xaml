@@ -19,7 +19,7 @@
              d:DataContext="{d:DesignInstance Type=local:WitTransformationsPage, IsDesignTimeCreatable=True}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="350"></ColumnDefinition>
+                <ColumnDefinition Width="250"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Border BorderBrush="Silver" BorderThickness="1" Margin="0,0,10,0">

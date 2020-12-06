@@ -29,7 +29,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Model.CurrentConfig.WorkingFolder == "" || Model.CurrentConfig.WorkingFolder.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)))
+            if (Model.CurrentConfig != null && (Model.CurrentConfig.WorkingFolder == "" || Model.CurrentConfig.WorkingFolder.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))))
             {
                 Model.CurrentConfig.WorkingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Azure DevOps Migration Utility", Model.CurrentConfig.Name);
                 Text_Name.GetBindingExpression(TextBox.TextProperty).UpdateSource();

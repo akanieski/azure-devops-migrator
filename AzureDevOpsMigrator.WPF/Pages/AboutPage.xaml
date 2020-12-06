@@ -19,8 +19,8 @@
             A special thanks to the teams of people that I have worked with over the years that have lent ideas and requested features that have found their way into this tool. Together as a community we can make our work easier and more enjoyable!
             <LineBreak/><LineBreak/><LineBreak/>
             <Bold>Open Source Credits:</Bold><LineBreak/><LineBreak/>
-            <Hyperlink NavigateUri="https://fontawesome.com/">Font-Awesome</Hyperlink><LineBreak/>
-            <Hyperlink NavigateUri="https://github.com/charri/Font-Awesome-WPF">Font-Awesome-WPF</Hyperlink>
+            <Button Margin="20,0,0,0" Click="GoUrl" Style="{StaticResource Hyperlink}" Tag="https://fontawesome.com/">Font-Awesome</Button><LineBreak/>
+            <Button Margin="20,0,0,0" Click="GoUrl" Style="{StaticResource Hyperlink}" Tag="https://github.com/charri/Font-Awesome-WPF">Font-Awesome-WPF</Button>
         </TextBlock>
     </StackPanel>
 </Page>
