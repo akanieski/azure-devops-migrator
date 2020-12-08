@@ -88,6 +88,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
             {
                 IsRunning = true;
                 Logs.Clear();
+                RefreshBindings();
                 _cancellationTokenSource = new CancellationTokenSource();
                 var _ = Task.Run(async () =>
                 {

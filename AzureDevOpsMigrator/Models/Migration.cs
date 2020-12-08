@@ -14,7 +14,6 @@ namespace AzureDevOpsMigrator.Models
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemTypeNameHandling = TypeNameHandling.Objects, TypeNameHandling = TypeNameHandling.Objects)]
         public ObservableCollection<object> Transformations { get; set; }
-        public string WorkingFolder { get; set; } = "";
         public string SourceQuery { get; set; } = "";
         public int MaxDegreeOfParallelism { get; set; } = 3;
         public bool FixHyperlinks { get; set; } = true;

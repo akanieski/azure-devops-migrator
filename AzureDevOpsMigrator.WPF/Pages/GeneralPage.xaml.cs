@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.WindowsAPICodePack.Dialogs;
+using Ookii.Dialogs.Wpf;
 using Path = System.IO.Path;
 
 namespace AzureDevOpsMigrator.WPF.Pages
@@ -23,6 +23,11 @@ namespace AzureDevOpsMigrator.WPF.Pages
         public MigrationViewModel Model => MainWindow.CurrentModel;
         public GeneralPage()
         {
+            if (Model.CurrentConfig == null)
+            {
+                Model.StartNew();
+            }
+            MainWindow.RefreshBindings();
             InitializeComponent();
             Unloaded += GeneralPage_Unloaded;
             DataContext = this;
@@ -30,33 +35,38 @@ namespace AzureDevOpsMigrator.WPF.Pages
 
         private void GeneralPage_Unloaded(object sender, RoutedEventArgs e)
         {
-            Model.CurrentConfig.WorkingFolder = Path.GetFullPath(Model.CurrentConfig.WorkingFolder);
 
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (Model.CurrentConfig != null && (Model.CurrentConfig.WorkingFolder == "" || Model.CurrentConfig.WorkingFolder.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))))
+            if (Model.CurrentConfig != null && (Model.WorkingFolder == "" || Model.WorkingFolder.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments))))
             {
-                Model.CurrentConfig.WorkingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Azure DevOps Migration Utility", Model.CurrentConfig.Name);
+                Model.WorkingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Azure DevOps Migration Utility", Model.CurrentConfig.Name ?? "");
                 Text_Name.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             }
         }
 
         private void Button_Next_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.NavigateTo<EndpointPage>(EndpointConfigMode.Source);
+            if (Model.CurrentConfig.Name.Length > 1 && Model.WorkingFolder.Length > 1)
+            {
+                MainWindow.NavigateTo<EndpointPage>(EndpointConfigMode.Source);
+            } 
+            else
+            {
+                MessageBox.Show("Please provide a valid name and working directory.");
+            }
         }
         private void BtnFindWorkingFolder_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
-            dialog.DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            CommonFileDialogResult result = dialog.ShowDialog();
+            var dialog = new VistaFolderBrowserDialog();
+            dialog.RootFolder = Environment.SpecialFolder.MyDocuments;
+            var result = dialog.ShowDialog();
 
-            if (result == CommonFileDialogResult.Ok)
+            if (result.HasValue && result.Value)
             {
-                Model.CurrentConfig.WorkingFolder = Path.GetFullPath(dialog.FileName);
+                Model.WorkingFolder = Path.GetFullPath(dialog.SelectedPath);
                 Text_WorkingFolder.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             }
         }

@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages"
-      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800" Background="White"
       Title="GettingStartedPage">
@@ -34,9 +34,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <fa:FontAwesome Cursor="Hand" Icon="ChevronRight" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                                    <fa:IconBlock Cursor="Hand" Icon="ChevronRight" Margin="0,0,10,0" VerticalAlignment="Center"/>
                                     <TextBlock Cursor="Hand" Text="{Binding Value}" PreviewMouseDown="Button_Open_Migration" FontSize="18" Tag="{Binding}"/>
-                                    <fa:FontAwesome Cursor="Hand" Icon="Close" Foreground="Salmon" VerticalAlignment="Center" FontSize="20" Margin="10,2,0,0" 
+                                    <fa:IconBlock Cursor="Hand" Icon="TrashAlt" Foreground="Salmon" VerticalAlignment="Center" FontSize="20" Margin="10,2,0,0" 
                                                         Tag="{Binding}" PreviewMouseDown="Button_Remove_Recent" />
                                 </StackPanel>
                             </DataTemplate>
@@ -51,7 +51,7 @@
                                 <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <fa:FontAwesome Icon="PlusCircle" VerticalAlignment="Center" Margin="0,3,10,0" FontSize="30" />
+                            <fa:IconBlock Icon="PlusCircle" VerticalAlignment="Center" Margin="0,3,10,0" FontSize="30" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center">New Migration</TextBlock>
                         </Grid>
                     </Button>
@@ -61,7 +61,7 @@
                                 <ColumnDefinition Width="50"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <fa:FontAwesome Icon="FolderOpen" VerticalAlignment="Center" Margin="0,3,10,0" FontSize="30" />
+                            <fa:IconBlock Icon="FolderOpen" VerticalAlignment="Center" Margin="0,3,10,0" FontSize="30" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center">Existing Migration</TextBlock>
                         </Grid>
                     </Button>

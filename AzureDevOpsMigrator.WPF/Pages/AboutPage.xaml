@@ -20,7 +20,7 @@
             <LineBreak/><LineBreak/><LineBreak/>
             <Bold>Open Source Credits:</Bold><LineBreak/><LineBreak/>
             <Button Margin="20,0,0,0" Click="GoUrl" Style="{StaticResource Hyperlink}" Tag="https://fontawesome.com/">Font-Awesome</Button><LineBreak/>
-            <Button Margin="20,0,0,0" Click="GoUrl" Style="{StaticResource Hyperlink}" Tag="https://github.com/charri/Font-Awesome-WPF">Font-Awesome-WPF</Button>
+            <Button Margin="20,0,0,0" Click="GoUrl" Style="{StaticResource Hyperlink}" Tag="https://raw.githubusercontent.com/awesome-inc/FontAwesome.Sharp/master/LICENSE">FontAwesome.Sharp</Button>
         </TextBlock>
     </StackPanel>
 </Page>

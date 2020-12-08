@@ -42,7 +42,8 @@ namespace AzureDevOpsMigrator.WPF.Pages
         private void BtnGettingStarted_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.InitializeHost();
-            MainWindow.CurrentModel.CurrentConfig = new Models.MigrationConfig();
+            MainWindow.CurrentModel.CurrentConfig = null;
+            MainWindow.CurrentModel.Saved = false;
             MainWindow.NavigateTo<GeneralPage>();
         }
 
@@ -55,6 +56,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
         private void Button_Remove_Recent(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Properties.Settings.Default.RecentMigrations.Remove(((KeyValuePair<string, string>)(sender as TextBlock).Tag).Key);
+            Properties.Settings.Default.Save();
             Load();
         }
 

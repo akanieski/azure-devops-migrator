@@ -59,6 +59,26 @@ namespace AzureDevOpsMigrator.WPF
             get => _previewedWorkItems;
             set => SignalChange(_previewedWorkItems = value, "PreviewedWorkItems");
         }
+        private bool _saved;
+        public bool Saved
+        {
+            get => _saved;
+            set => SignalChange(_saved = value, "Saved");
+        }
+        private string _workingFolder;
+        public string WorkingFolder
+        {
+            get => _workingFolder;
+            set => SignalChange(_workingFolder = value, "WorkingFolder");
+        }
+
+        public void StartNew()
+        {
+
+            CurrentConfig = new Models.MigrationConfig();
+            Saved = false;
+            WorkingFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        }
     }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -102,18 +122,22 @@ namespace AzureDevOpsMigrator.WPF
 
         public static void SaveModel()
         {
-            CurrentModel.CurrentConfig.WorkingFolder = Path.GetFullPath(CurrentModel.CurrentConfig.WorkingFolder);
-            Directory.CreateDirectory(CurrentModel.CurrentConfig.WorkingFolder);
-            var path = Path.Combine(CurrentModel.CurrentConfig.WorkingFolder, $"{CurrentModel.CurrentConfig.Name}.miproj");
-            File.WriteAllText(path, JsonConvert.SerializeObject(CurrentModel.CurrentConfig, new JsonSerializerSettings()
+            if (!string.IsNullOrEmpty(CurrentModel.WorkingFolder) && !string.IsNullOrEmpty(CurrentModel.CurrentConfig.Name))
             {
-                Formatting = Formatting.Indented
-            }));
-            if (!Properties.Settings.Default.RecentMigrations.Contains(path))
-            {
-                Properties.Settings.Default.RecentMigrations.Add(path);
+                CurrentModel.WorkingFolder = Path.GetFullPath(CurrentModel.WorkingFolder);
+                Directory.CreateDirectory(CurrentModel.WorkingFolder);
+                var path = Path.Combine(CurrentModel.WorkingFolder, $"{CurrentModel.CurrentConfig.Name}.miproj");
+                File.WriteAllText(path, JsonConvert.SerializeObject(CurrentModel.CurrentConfig, new JsonSerializerSettings()
+                {
+                    Formatting = Formatting.Indented
+                }));
+                if (!Properties.Settings.Default.RecentMigrations.Contains(path))
+                {
+                    Properties.Settings.Default.RecentMigrations.Add(path);
+                }
+                Properties.Settings.Default.Save();
+                CurrentModel.Saved = true;
             }
-            Properties.Settings.Default.Save();
         }
         public static void LoadModel(string path = null)
         {
@@ -124,55 +148,61 @@ namespace AzureDevOpsMigrator.WPF
             else
             {
                 var config = JsonConvert.DeserializeObject<MigrationConfig>(File.ReadAllText(path)) as MigrationConfig;
+                CurrentModel.Saved = true;
                 CurrentModel.CurrentConfig = config;
             }
             InitializeHost();
             _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("ShownWhileEditing"));
+            _currentInstance.Model.WorkingFolder = new FileInfo(path).DirectoryName;
             NavigateTo<GeneralPage>();
         }
 
-        public static void NavigateTo<TPage>(params object[] parameters) where TPage : Page
+        public static void NavigateTo<TPage>(object parameter = null) where TPage : Page
         {
             if (CurrentModel.CurrentConfig != null &&
-                !string.IsNullOrEmpty(CurrentModel.CurrentConfig.WorkingFolder) &&
+                !string.IsNullOrEmpty(CurrentModel.WorkingFolder) &&
                 !string.IsNullOrEmpty(CurrentModel.CurrentConfig.Name))
             {
                 SaveModel();
             }
-            CurrentPage = parameters.Count() == 0 ? Activator.CreateInstance(typeof(TPage)) as Page  : Activator.CreateInstance(typeof(TPage), parameters) as Page;
+            CurrentPage = parameter == null ? Activator.CreateInstance(typeof(TPage)) as Page  : Activator.CreateInstance(typeof(TPage), parameter) as Page;
             _currentInstance.AppFrame.Navigate(CurrentPage);
-            _currentInstance._PageChanged();
+            RefreshBindings();
             _currentInstance.Title = _currentInstance.CustomTitle;
         }
 
         #region Nav Styles ...
         private Style _activeNavButtonStyle;
-        private Style __navButtonStyle;
-        
+        private Style _navButtonStyle;
+        private Style _navButtonStyleHidden;
+
         public Style AboutPageStyle => CurrentPage is AboutPage ? _activeNavButtonStyle : null;
-        public Style WorkItemsPageStyle => CurrentPage is WorkItemsPage ? _activeNavButtonStyle : null;
-        public Style RunMigrationPageStyle => CurrentPage is RunMigrationPage ? _activeNavButtonStyle : null;
-        public Style GettingStartedPageStyle => CurrentPage is GettingStartedPage ? _activeNavButtonStyle : null;
-        public Style GeneralPageStyle => CurrentPage is GeneralPage ? _activeNavButtonStyle : null;
-        public Style TargetEndpointPageStyle => CurrentPage is EndpointPage && (CurrentPage as EndpointPage).Mode == EndpointConfigMode.Target ? _activeNavButtonStyle : null;
-        public Style SourceEndpointPageStyle => CurrentPage is EndpointPage && (CurrentPage as EndpointPage).Mode == EndpointConfigMode.Source ? _activeNavButtonStyle : null;
-        public Visibility ShownWhileEditing => CurrentModel.CurrentConfig != null ? Visibility.Visible : Visibility.Collapsed;
+        public Style WorkItemsPageStyle => CurrentPage is WorkItemsPage ? _activeNavButtonStyle : ShownWhileEditing && Model.CurrentConfig != null ? _navButtonStyle : null;
+        public Style RunMigrationPageStyle => CurrentPage is RunMigrationPage ? _activeNavButtonStyle : ShownWhileEditing && Model.CurrentConfig != null ? _navButtonStyle : null;
+        public Style CloseMigrationStyle => ShownWhileEditing && Model.CurrentConfig != null ? _navButtonStyle : null;
+        public Style GettingStartedPageStyle =>  CurrentPage is GettingStartedPage ? _activeNavButtonStyle : ShownWhileEditing && Model.CurrentConfig != null ? _navButtonStyle : null;
+        public Style GeneralPageStyle => CurrentPage is GeneralPage ? _activeNavButtonStyle : Model.CurrentConfig != null ? _navButtonStyle : null;
+        public Style TargetEndpointPageStyle => CurrentPage is EndpointPage && (CurrentPage as EndpointPage).Mode == EndpointConfigMode.Target ? _activeNavButtonStyle : ShownWhileEditing && Model.CurrentConfig != null ? _navButtonStyle : null;
+        public Style SourceEndpointPageStyle => CurrentPage is EndpointPage && (CurrentPage as EndpointPage).Mode == EndpointConfigMode.Source ? _activeNavButtonStyle : ShownWhileEditing && Model.CurrentConfig != null ? _navButtonStyle : null;
+        public bool ShownWhileEditing => CurrentModel.CurrentConfig != null && CurrentModel.Saved;
+        public bool ShownWhileNew => CurrentModel.CurrentConfig != null && !CurrentModel.Saved;
         #endregion
 
         public string Version => $"v{Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version}";
         public string CustomTitle => $"Azure DevOps Migration Utility {(CurrentModel?.CurrentConfig != null ? "- " + CurrentModel.CurrentConfig.Name : "")}";
 
-        private void _PageChanged()
+        public static void RefreshBindings()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Title"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CurrentPage"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SourceEndpointPageStyle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("TargetEndpointPageStyle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GeneralPageStyle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("WorkItemsPageStyle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("HistoryPageStyle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("GettingStartedPageStyle"));
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("RunMigrationPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("Title"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("CurrentPage"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("SourceEndpointPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("TargetEndpointPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("GeneralPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("WorkItemsPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("HistoryPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("GettingStartedPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("RunMigrationPageStyle"));
+            _currentInstance.PropertyChanged?.Invoke(_currentInstance, new PropertyChangedEventArgs("CloseMigrationStyle")); 
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -196,7 +226,7 @@ namespace AzureDevOpsMigrator.WPF
             Title = CustomTitle;
             _currentInstance = this;
             _activeNavButtonStyle = Application.Current.FindResource("NavButtonActive") as Style;
-            __navButtonStyle = Application.Current.FindResource("NavButton") as Style;
+            _navButtonStyle = Application.Current.FindResource("NavButton") as Style;
             NavigateTo<GettingStartedPage>();
         }
 
@@ -228,8 +258,8 @@ namespace AzureDevOpsMigrator.WPF
 
         private void Nav_CLoseMigration_Clicked(object sender, RoutedEventArgs e)
         {
-            NavigateTo<GettingStartedPage>();
             CurrentModel.CurrentConfig = null;
+            NavigateTo<GettingStartedPage>();
         }
     }
 

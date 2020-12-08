@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages"
                  xmlns:clr="clr-namespace:System;assembly=mscorlib"
-      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       mc:Ignorable="d" Loaded="Page_Loaded"
       d:DesignHeight="784" d:DesignWidth="1152"
       Title="EndpointPage">
@@ -96,7 +96,7 @@
                           SelectedValue="{Binding Model.ProjectName, Mode=TwoWay}">
                 </ComboBox>
                 <Button Width="40" Name="Button_LoadProjects" Click="Button_LoadProjects_Click">
-                    <fa:FontAwesome Icon="Refresh"></fa:FontAwesome>
+                    <fa:IconBlock Icon="SyncAlt"></fa:IconBlock>
                 </Button>
             </StackPanel>
 
@@ -105,8 +105,8 @@
             <Button Name="Button_Next" Click="Button_Next_Click" MinWidth="100" Margin="20,0">Next</Button>
             <Button Name="Button_Test" Click="Button_Test_Click" MinWidth="100" IsEnabled="{Binding TestLoading, Mode=OneWay}">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <fa:FontAwesome VerticalAlignment="Center" Icon="Check" Foreground="Green" Margin="0,0,10,0" Visibility="{Binding ConnectionSuccessful, Mode=OneWay}"/>
-                    <fa:FontAwesome VerticalAlignment="Center" Icon="ExclamationCircle" Foreground="DarkRed" Margin="0,0,10,0" Visibility="{Binding ConnectionFailed, Mode=OneWay}"/>
+                    <fa:IconBlock VerticalAlignment="Center" Icon="Check" Foreground="Green" Margin="0,0,10,0" Visibility="{Binding ConnectionSuccessful, Mode=OneWay}"/>
+                    <fa:IconBlock VerticalAlignment="Center" Icon="ExclamationCircle" Foreground="DarkRed" Margin="0,0,10,0" Visibility="{Binding ConnectionFailed, Mode=OneWay}"/>
                     <TextBlock VerticalAlignment="Center">Test Connection</TextBlock>
                 </StackPanel>
             </Button>
