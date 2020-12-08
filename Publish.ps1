@@ -8,8 +8,13 @@ if (!$tag) {
 }
 $tagMatch = $tag -match "^v*\d\.\d\.\d\.\d"
 if (!$tagMatch) {
-	Write-Host "Tag must be in v#.#.#.# format"
-	exit 1
+	$tagMatch = $tag -match "^refs/tags/v\d\.\d\.\d\.\d"
+	if (!$tagMatch) {
+		Write-Host "Tag must be in v#.#.#.# format"
+		exit 1
+	} else {
+		$tag = $tag -replace "refs/tags/v", ""
+	}
 }
 
 $adjustedTag = $tag -replace "v",""

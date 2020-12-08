@@ -16,7 +16,7 @@
     <PackageIcon>logo-cadet-blue.png</PackageIcon>
     <AssemblyName>Migrator.Windows</AssemblyName>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-<FileVersion>1.0.1.2</FileVersion>
+<FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
