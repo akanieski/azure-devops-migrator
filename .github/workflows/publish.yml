@@ -15,7 +15,7 @@ jobs:
 
     runs-on: windows-latest
     env:
-      VERSION: ${{ github.event.inputs.version_number || github.ref}}
+      APP_VERSION: ${{ github.event.inputs.version_number || github.ref}}
   
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,7 @@ jobs:
       run: dotnet restore
 
     - name: Publish
-      run: .\Publish.ps1 -Tag $VERSION
+      run: .\Publish.ps1 -Tag $APP_VERSION
 
     - name: Create Release
       id: create_release
@@ -36,8 +36,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
       with:
-        tag_name: $VERSION
-        release_name: Release $VERSION
+        tag_name: $APP_VERSION
+        release_name: Release $APP_VERSION
         body: Latest Build
         draft: false
         prerelease: false
