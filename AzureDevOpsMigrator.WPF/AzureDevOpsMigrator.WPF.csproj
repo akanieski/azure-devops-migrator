@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -14,10 +14,9 @@
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageProjectUrl>https://andrewkanieski.com/post/azure-devops-migration-utility</PackageProjectUrl>
     <PackageIcon>logo-cadet-blue.png</PackageIcon>
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>SigningCert.pfx</AssemblyOriginatorKeyFile>
-    <DelaySign>false</DelaySign>
     <AssemblyName>Migrator.Windows</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+<FileVersion>1.0.1.2</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,14 +31,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Common\FieldToFieldTransformationControl - Copy.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>FieldToFieldTransformationControl.xaml.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\WitPages\WitGeneralPage - Copy.xaml.cs">
-      <SubType>Code</SubType>
-      <DependentUpon>WitGeneralPage.xaml.cs</DependentUpon>
-    </Compile>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
