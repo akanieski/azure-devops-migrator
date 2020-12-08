@@ -44,6 +44,8 @@ namespace AzureDevOpsMigrator.WPF.Pages
             {
                 Model.WorkingFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Azure DevOps Migration Utility", Model.CurrentConfig.Name ?? "");
                 Text_Name.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                Text_WorkingFolder.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                Text_WorkingFolder.PageRight();
             }
         }
 
@@ -68,6 +70,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
             {
                 Model.WorkingFolder = Path.GetFullPath(dialog.SelectedPath);
                 Text_WorkingFolder.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                Text_WorkingFolder.ScrollToEnd();
             }
         }
     }
