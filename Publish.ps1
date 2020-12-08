@@ -25,5 +25,5 @@ Write-Host "Awaiting file lock release.."
 Start-Sleep -s 1
 Write-Host "Continuing to zip outputs.."
 $flatTag = $tag -replace '\.','_'
-Compress-Archive -Path AzureDevOpsMigrator.WPF\bin\publish\*.* -DestinationPath "AzureDevOpsMigrator.WPF\bin\publish\AzureDevOpsMigrationUtility_$flatTag.zip"
+Compress-Archive -Path AzureDevOpsMigrator.WPF\bin\publish\*.* -DestinationPath "AzureDevOpsMigrationUtility_x64.zip"
 Write-Host "Done!"
