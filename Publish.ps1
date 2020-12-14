@@ -24,7 +24,7 @@ Write-Host $updatedProjectFileContents
 
 $updatedProjectFileContents | Set-Content AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj 
 
-dotnet publish AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj -c Release /p:PublishProfile=AzureDevOpsMigrator.WPF\Properties\PublishProfiles\netcoreapp31.pubxml
+dotnet publish AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj -c Release /p:PublishProfile=AzureDevOpsMigrator.WPF\Properties\PublishProfiles\netcoreapp31.pubxml --framework netcoreapp3.1
 
 Write-Host "Awaiting file lock release.."
 Start-Sleep -s 1
