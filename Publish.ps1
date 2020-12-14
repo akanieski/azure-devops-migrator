@@ -24,11 +24,11 @@ Write-Host $updatedProjectFileContents
 
 $updatedProjectFileContents | Set-Content AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj 
 
-dotnet publish AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj -c Release /p:PublishProfile=AzureDevOpsMigrator.WPF\Properties\PublishProfiles\FolderProfile.pubxml
+dotnet publish AzureDevOpsMigrator.WPF\AzureDevOpsMigrator.WPF.csproj -c Release /p:PublishProfile=AzureDevOpsMigrator.WPF\Properties\PublishProfiles\netcoreapp31.pubxml
 
 Write-Host "Awaiting file lock release.."
 Start-Sleep -s 1
 Write-Host "Continuing to zip outputs.."
 $flatTag = $tag -replace '\.','_'
-Compress-Archive -Path AzureDevOpsMigrator.WPF\bin\publish\*.* -DestinationPath "AzureDevOpsMigrationUtility_x64.zip"
+Compress-Archive -Path AzureDevOpsMigrator.WPF\bin\publish\netcoreapp31\*.* -DestinationPath "AzureDevOpsMigrationUtility_x64.zip"
 Write-Host "Done!"
