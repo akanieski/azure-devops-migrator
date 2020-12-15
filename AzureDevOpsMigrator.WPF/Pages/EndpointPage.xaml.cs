@@ -145,7 +145,12 @@ namespace AzureDevOpsMigrator.WPF.Pages
 
         private void Button_GeneratePat_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start($"{Model.EndpointUri}/_usersSettings/tokens");
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("cmd", $"/C start {Model.EndpointUri}/_usersSettings/tokens")
+            {
+                WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden,
+                CreateNoWindow = true,
+                UseShellExecute = true
+            });
         }
 
         private void Button_LoadProjects_Click(object sender, RoutedEventArgs e)

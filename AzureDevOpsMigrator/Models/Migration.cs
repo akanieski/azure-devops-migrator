@@ -13,7 +13,7 @@ namespace AzureDevOpsMigrator.Models
         public EndpointConfig TargetEndpointConfig { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore, ItemTypeNameHandling = TypeNameHandling.Objects, TypeNameHandling = TypeNameHandling.Objects)]
-        public ObservableCollection<object> Transformations { get; set; }
+        public ObservableCollection<object> Transformations { get; set; } = new ObservableCollection<object>();
         public string SourceQuery { get; set; } = "";
         public int MaxDegreeOfParallelism { get; set; } = 3;
         public bool FixHyperlinks { get; set; } = true;

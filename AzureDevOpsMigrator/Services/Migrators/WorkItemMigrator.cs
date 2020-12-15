@@ -14,6 +14,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.Core.WebApi;
+using Microsoft.VisualStudio.Services.WebApi;
 
 namespace AzureDevOpsMigrator.Migrators
 {
@@ -38,7 +39,7 @@ namespace AzureDevOpsMigrator.Migrators
             _sourceProject = await _sourceEndpoint.GetProject(_config.SourceEndpointConfig.ProjectName);
             _targetProject = await _targetEndpoint.GetProject(_config.TargetEndpointConfig.ProjectName);
 
-            var result = new Queue<int>(await _sourceEndpoint.GetIdsByWiql(_config.SourceQuery, token));
+            var result = new Queue<int>(await _sourceEndpoint.GetIdsByWiql(_config.SourceQuery, token, _config.SourceEndpointConfig.ProjectName));
             _totalCount = result.Count;
             _processedCount = 0;
             ConcurrentBag<Exception> haltedExceptions = new ConcurrentBag<Exception>();
@@ -162,8 +163,15 @@ namespace AzureDevOpsMigrator.Migrators
             foreach (var field in source.Fields.Where(srcField => !_fieldsNotToCopy.Contains(srcField.Key)))
             {
                 var projectField = _sourceProjectFields.FirstOrDefault(projectField => projectField.ReferenceName.Equals(field.Key));
+
                 if (projectField != null && !projectField.ReadOnly)
                 {
+
+                    if (field.Value is IdentityRef)
+                    {
+                        (field.Value as IdentityRef).Descriptor = new SubjectDescriptor();
+                    }
+
                     if (!target.Fields.ContainsKey(field.Key))
                     {
                         target.Fields.Add(field);
@@ -428,7 +436,7 @@ namespace AzureDevOpsMigrator.Migrators
         }
 
         public async Task<int?> GetPlannedCount(CancellationToken token) => !_config.Execution.WorkItemsMigratorEnabled ? 
-            await Task.FromResult<int?>(null) : (await _sourceEndpoint.GetIdsByWiql(_config.SourceQuery, token)).Count();
+            await Task.FromResult<int?>(null) : (await _sourceEndpoint.GetIdsByWiql(_config.SourceQuery, token, _config.SourceEndpointConfig.ProjectName)).Count();
 
         public async Task<WorkItemField[]> CompareFields(CancellationToken token)
         {

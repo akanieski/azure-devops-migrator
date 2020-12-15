@@ -4,30 +4,63 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AzureDevOpsMigrator.WPF.Pages.WitPages"
+      xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
       xmlns:clr="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
-      d:DesignHeight="784" d:DesignWidth="1152"
+      d:DesignHeight="784" d:DesignWidth="1152" Focusable="False"
       Title="WitQueryPage">
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <clr:String x:Key="Summary">Found {0} work items.. showing top 100</clr:String>
     </Page.Resources>
 
-    <Grid>
+    <Grid Focusable="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="70"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock VerticalAlignment="Center">Query Filter</TextBlock>
-            <TextBox Width="500" Margin="20,0,20,0" Text="{Binding Model.SourceQuery}"></TextBox>
-            <Button Name="Button_Load" Height="40" Click="Button_Load_Click">Load Preview</Button>
-        </StackPanel>
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="50"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0" VerticalAlignment="Center">Query Filter</TextBlock>
+            <TextBox Grid.Column="1" Text="{Binding Model.SourceQuery}" Margin="0,0,10,0"></TextBox>
+            <Button Grid.Column="2" Name="Button_Help" Height="40" Width="40" Margin="0,0,10,0" Click="Button_Help_Click">
+                <fa:IconBlock Icon="QuestionCircle" FontSize="18"></fa:IconBlock>
+            </Button>
+            <Button Grid.Column="3" Name="Button_Load" Height="40" Click="Button_Load_Click">Load Preview</Button>
+        </Grid>
         <DataGrid Grid.Row="1" ItemsSource="{Binding Results}" AutoGenerateColumns="True" Name="dgItems">
         </DataGrid>
         <TextBlock HorizontalAlignment="Center" Margin="0,40,0,0" FontStyle="Italic" Grid.Row="1" Text="No results found" Visibility="{Binding Items.IsEmpty, Converter={StaticResource BooleanToVisibilityConverter}, ElementName=dgItems}" />
         <TextBlock Grid.Row="2" Margin="0,10,0,0" HorizontalAlignment="Center" Text="{Binding Total, StringFormat={StaticResource Summary}}" 
                    Visibility="{Binding HasRecords, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+        <Grid Grid.Row="1" Margin="0" Background="DarkSlateGray" Opacity="0.5" Visibility="{Binding FieldPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}"></Grid>
+        <Border Grid.Row="1" Margin="25"  BorderBrush="{StaticResource PanelBorder}" Background="White" Visibility="{Binding FieldPopupVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Border BorderThickness="0,0,0,1" BorderBrush="DarkGray" >
+                    <Grid Height="40" Background="{StaticResource PanelBackground}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="40"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource AccordionHeader}" VerticalAlignment="Center" Margin="10,0,0,0">Available Fields</TextBlock>
+                        <Button Grid.Column="1" BorderThickness="0" Background="Transparent" Click="Button_Help_Click">
+                            <fa:IconBlock Icon="WindowClose" FontSize="20" Foreground="{ StaticResource DarkColor}"/>
+                        </Button>
+                    </Grid>
+                </Border>
+                <DataGrid ItemsSource="{Binding ProjectFields}" Margin="15" VerticalScrollBarVisibility="Visible" Grid.Row="1" CanUserAddRows="False" CanUserDeleteRows="False"/>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

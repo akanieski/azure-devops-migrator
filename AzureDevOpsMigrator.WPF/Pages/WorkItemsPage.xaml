@@ -25,7 +25,7 @@
             <TextBlock PreviewMouseDown="Tab_Selected" Name="IterationsTab" Style="{StaticResource CustomTab}">Iterations</TextBlock>
             <TextBlock PreviewMouseDown="Tab_Selected" Name="TransformationsTab" Style="{StaticResource CustomTab}">Transformation</TextBlock>
         </StackPanel>
-        <Frame Name="WitPage" Grid.Row="2">
+        <Frame Name="WitPage" Grid.Row="2"  Focusable="False">
             
         </Frame>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">

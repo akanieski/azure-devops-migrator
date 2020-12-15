@@ -112,6 +112,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
                     }
                     catch (Exception ex)
                     {
+                        GUILogger_Logged(this, new LogEventArgs(ex.ToString(), Microsoft.Extensions.Logging.LogLevel.Error));
                         IsRunning = false;
                         RefreshBindings();
                         await Task.Delay(500);

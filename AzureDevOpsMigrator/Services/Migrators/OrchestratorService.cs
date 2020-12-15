@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.TeamFoundation.WorkItemTracking.WebApi.Models;
+using System.Collections.Generic;
 
 namespace AzureDevOpsMigrator.Migrators
 {
@@ -74,10 +75,50 @@ namespace AzureDevOpsMigrator.Migrators
 
             InitializeEndpoints();
 
+            var exceptions = new List<Exception>();
+
             await Task.WhenAll(
-                Task.Run(async () => plan.IterationsCount = await _iterationMigrator.GetPlannedCount(token)),
-                Task.Run(async () => plan.AreaPathsCount = await _areaPathMigrator.GetPlannedCount(token)),
-                Task.Run(async () => plan.WorkItemsCount = await _workItemMigrator.GetPlannedCount(token)));
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        return plan.IterationsCount = await _iterationMigrator.GetPlannedCount(token);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                        return -1;
+                    }
+                }),
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        return plan.AreaPathsCount = await _areaPathMigrator.GetPlannedCount(token);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                        return -1;
+                    }
+                }),
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        return plan.WorkItemsCount = await _workItemMigrator.GetPlannedCount(token);
+                    }
+                    catch (Exception ex)
+                    {
+                        exceptions.Add(ex);
+                        return -1;
+                    }
+                }));
+
+            if (exceptions.Count > 0)
+            {
+                throw new MigrationException($"Failed to generate migration plan.", exceptions.First());
+            }
 
             return plan;
         }
@@ -129,9 +170,23 @@ namespace AzureDevOpsMigrator.Migrators
                 _currentPlan = plan;
                 _log.LogInformation("Starting migrations");
 
-                await _areaPathMigrator.ExecuteAsync(token);
+                if (_config.Execution.AreaPathMigratorEnabled)
+                {
+                    await _areaPathMigrator.ExecuteAsync(token);
+                }
+                else
+                {
+                    _log.LogInformation("Skipping area path migrations..");
+                }
+                if (_config.Execution.IterationsMigratorEnabled)
+                {
+                    await _iterationMigrator.ExecuteAsync(token);
+                }
+                else
+                {
+                    _log.LogInformation("Skipping iteration migrations..");
+                }
 
-                await _iterationMigrator.ExecuteAsync(token);
 
                 await _workItemMigrator.ExecuteAsync(token);
             }

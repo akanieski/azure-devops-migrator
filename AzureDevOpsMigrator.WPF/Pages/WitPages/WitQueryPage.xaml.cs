@@ -44,11 +44,22 @@ namespace AzureDevOpsMigrator.WPF.Pages.WitPages
     /// </summary>
     public partial class WitQueryPage : Page, INotifyPropertyChanged
     {
+        public List<WorkItemField> ProjectFields { get; set; }
         private IEndpointService _endpoint;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MigrationConfig Model => MainWindow.CurrentModel.CurrentConfig;
+        private bool _fieldPopupVisible { get; set; }
+        public bool FieldPopupVisible
+        {
+            get => _fieldPopupVisible;
+            set
+            {
+                _fieldPopupVisible = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(FieldPopupVisible)));
+            }
+        }
         public ObservableCollection<WorkItemSummary> Results { get; set; } = new ObservableCollection<WorkItemSummary>();
         public int Total { get; set; }
         public bool HasRecords { get; set; }
@@ -71,8 +82,9 @@ namespace AzureDevOpsMigrator.WPF.Pages.WitPages
             _endpoint.Initialize(Model.SourceEndpointConfig.EndpointUri, Model.SourceEndpointConfig.PersonalAccessToken);
             try
             {
+                ProjectFields = (await _endpoint.GetFields(Model.SourceEndpointConfig.ProjectName, CancellationToken.None)).ToList();
                 var result = await _endpoint.GetWorkItemsAsync(
-                    $"select * from WorkItems {(string.IsNullOrEmpty(Model.SourceQuery) ? "" : "where " + Model.SourceQuery)}",
+                    $"select * from WorkItems where [System.TeamProject] = '{Model.SourceEndpointConfig.ProjectName}' {(string.IsNullOrEmpty(Model.SourceQuery) ? "" : $"and ({Model.SourceQuery})")}",
                     CancellationToken.None,
                     top: 100);
                 Total = result.TotalCount;
@@ -81,6 +93,7 @@ namespace AzureDevOpsMigrator.WPF.Pages.WitPages
                 HasRecords = Total > 0;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Total)));
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasRecords)));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ProjectFields)));
             }
             catch (Exception ex)
             {
@@ -88,5 +101,9 @@ namespace AzureDevOpsMigrator.WPF.Pages.WitPages
             }
         }
 
+        private void Button_Help_Click(object sender, RoutedEventArgs e)
+        {
+            FieldPopupVisible = !FieldPopupVisible;
+        }
     }
 }

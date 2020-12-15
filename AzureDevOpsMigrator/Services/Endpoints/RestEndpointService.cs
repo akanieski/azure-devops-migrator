@@ -117,7 +117,8 @@ namespace AzureDevOpsMigrator.EndpointServices
 
         public async Task UpsertClassificationNodesAsync(WorkItemClassificationNode node, string projectName, TreeStructureGroup group, CancellationToken token)
         {
-            await _witClient.CreateOrUpdateClassificationNodeAsync(node, projectName, group, cancellationToken: token);
+            var path = string.Join("/", node.Path.Split('\\').Skip(3).Where(x => x != node.Name));
+            await _witClient.CreateOrUpdateClassificationNodeAsync(node, projectName, group, path: path, cancellationToken: token);
         }
 
         public async Task<IEnumerable<WorkItemClassificationNode>> GetAreaPaths(string projectName, CancellationToken token) =>
@@ -143,11 +144,11 @@ namespace AzureDevOpsMigrator.EndpointServices
             return await _projectsClient.GetProjects(top: ushort.MaxValue);
         }
 
-        public async Task<IEnumerable<int>> GetIdsByWiql(string wiqlQuery, CancellationToken token)
+        public async Task<IEnumerable<int>> GetIdsByWiql(string wiqlQuery, CancellationToken token, string projectName = "")
         {
             CheckInitialized();
             var wiql = new Wiql();
-            wiql.Query = $"SELECT * FROM WORKITEMS WHERE {wiqlQuery}";
+            wiql.Query = $"SELECT * FROM WORKITEMS where [System.TeamProject] = '{projectName}' {(string.IsNullOrEmpty(wiqlQuery) ? "" : $" and ({wiqlQuery})")}";
             return (await _witClient.QueryByWiqlAsync(wiql, false, cancellationToken: token)).WorkItems.Select(i => i.Id);
         }
 
@@ -281,7 +282,7 @@ namespace AzureDevOpsMigrator.EndpointServices
 
         public async Task<WorkItem> GetWorkItemByMigrationState(string projectName, string migrationStateField, string url, CancellationToken token)
         {
-            var existing = await GetIdsByWiql($"[Custom.{migrationStateField}] = '{url}'", token);
+            var existing = await GetIdsByWiql($"[Custom.{migrationStateField}] = '{url}'", token, projectName);
 
             if (existing.Count() == 0)
             {
@@ -326,7 +327,7 @@ namespace AzureDevOpsMigrator.EndpointServices
         Task<IEnumerable<WorkItemClassificationNode>> GetClassificationNodes(string projectName, TreeStructureGroup type, CancellationToken token);
         Task<IEnumerable<WorkItemField>> GetFields(string project, CancellationToken token);
         Task<WorkItemField> CreateField(WorkItemField field, CancellationToken token);
-        Task<IEnumerable<int>> GetIdsByWiql(string wiqlQuery, CancellationToken token);
+        Task<IEnumerable<int>> GetIdsByWiql(string wiqlQuery, CancellationToken token, string projectName = "");
         Task<IEnumerable<WorkItemClassificationNode>> GetIterations(string projectName, CancellationToken token);
         Task<TeamProject> GetProject(string projectName);
         Task<WorkItem> GetWorkItem(string projectName, int workItemId, CancellationToken token, WorkItemExpand expand = WorkItemExpand.None);

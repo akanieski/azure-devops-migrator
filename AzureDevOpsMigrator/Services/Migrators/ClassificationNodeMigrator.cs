@@ -62,12 +62,14 @@ namespace AzureDevOpsMigrator.Migrators
                 if (existing == null)
                 {
                     // Create a new area path in target
+                    var updatedPath = @"\" + _config.TargetEndpointConfig.ProjectName + (_nodeType == TreeNodeStructureType.Area ? @"\Area\" : @"\Iteration\") + sourceNode.Path;
                     upsertedNodes.Add((SyncState.Create, new WorkItemClassificationNode()
                     {
-                        Path = @"\" + _config.TargetEndpointConfig.ProjectName + (_nodeType == TreeNodeStructureType.Area ? @"\Area\" : @"\Iteration\") + sourceNode.Path,
+                        Path = updatedPath,
                         Name = sourceNode.Path.Split(@"\").Last(),
                         StructureType = sourceNode.Node.StructureType,
-                        Attributes = sourceNode.Node.Attributes
+                        Attributes = sourceNode.Node.Attributes,
+                        HasChildren = sourceNode.Node.HasChildren
                     }));
                 } 
                 else
@@ -78,15 +80,18 @@ namespace AzureDevOpsMigrator.Migrators
                     {
                         foreach (var sourcePair in sourceNode.Node.Attributes)
                         {
-                            if (existing.Node.Attributes.ContainsKey(sourcePair.Key) && !existing.Node.Attributes[sourcePair.Key].Equals(sourcePair.Value))
+                            if (existing.Node.Attributes != null)
                             {
-                                changes = true;
-                                existing.Node.Attributes[sourcePair.Key] = sourcePair.Value;
-                            }
-                            else if (!existing.Node.Attributes.ContainsKey(sourcePair.Key))
-                            {
-                                changes = true;
-                                existing.Node.Attributes.Add(sourcePair);
+                                if (existing.Node.Attributes.ContainsKey(sourcePair.Key) && !existing.Node.Attributes[sourcePair.Key].Equals(sourcePair.Value))
+                                {
+                                    changes = true;
+                                    existing.Node.Attributes[sourcePair.Key] = sourcePair.Value;
+                                }
+                                else if (!existing.Node.Attributes.ContainsKey(sourcePair.Key))
+                                {
+                                    changes = true;
+                                    existing.Node.Attributes.Add(sourcePair);
+                                }
                             }
                         }
                     }
