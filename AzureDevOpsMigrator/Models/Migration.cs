@@ -24,8 +24,12 @@ namespace AzureDevOpsMigrator.Models
         public string MigrationStateField { get; set; } = "MigrationState";
         public bool MigrateHistory { get; set; } = true;
         public bool MigrateAttachments { get; set; } = true;
+        public string AreaPathFilter { get; set; } = "";
+        public string IterationFilter { get; set; } = "";
 
         public ObservableCollection<GitRepo> GitRepoMappings { get; set; } = new ObservableCollection<GitRepo>();
+        public bool MigrateItemRelations { get; set; }
+        public bool MigrateArtifactLinks { get; set; }
     }
     public class GitRepo
     {

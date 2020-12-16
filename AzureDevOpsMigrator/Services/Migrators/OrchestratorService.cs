@@ -82,7 +82,7 @@ namespace AzureDevOpsMigrator.Migrators
                 {
                     try
                     {
-                        return plan.IterationsCount = await _iterationMigrator.GetPlannedCount(token);
+                        return plan.IterationsCount = _config.Execution.IterationsMigratorEnabled ? await _iterationMigrator.GetPlannedCount(token) : 0;
                     }
                     catch (Exception ex)
                     {
@@ -94,7 +94,7 @@ namespace AzureDevOpsMigrator.Migrators
                 {
                     try
                     {
-                        return plan.AreaPathsCount = await _areaPathMigrator.GetPlannedCount(token);
+                        return plan.AreaPathsCount = _config.Execution.AreaPathMigratorEnabled ? await _areaPathMigrator.GetPlannedCount(token) : 0;
                     }
                     catch (Exception ex)
                     {
@@ -106,7 +106,7 @@ namespace AzureDevOpsMigrator.Migrators
                 {
                     try
                     {
-                        return plan.WorkItemsCount = await _workItemMigrator.GetPlannedCount(token);
+                        return plan.WorkItemsCount = _config.Execution.WorkItemsMigratorEnabled ? await _workItemMigrator.GetPlannedCount(token) : 0;
                     }
                     catch (Exception ex)
                     {
@@ -188,7 +188,14 @@ namespace AzureDevOpsMigrator.Migrators
                 }
 
 
-                await _workItemMigrator.ExecuteAsync(token);
+                if (_config.Execution.WorkItemsMigratorEnabled)
+                {
+                    await _workItemMigrator.ExecuteAsync(token);
+                } 
+                else
+                {
+                    _log.LogInformation("Skipping work item migrations..");
+                }
             }
             catch (OperationCanceledException opCanceledEx)
             {

@@ -38,11 +38,15 @@ namespace AzureDevOpsMigrator.Migrators
 
             var flattenedSourcePaths = new List<(string Path, WorkItemClassificationNode Node)>();
             FlattenNodes(sourcePaths, ref flattenedSourcePaths);
-            flattenedSourcePaths = flattenedSourcePaths.OrderBy(s => s.Path).Select(p => (string.Join('\\', p.Path.Split(@"\").Skip(3)), p.Node)).ToList();
+            flattenedSourcePaths = flattenedSourcePaths.OrderBy(s => s.Path)
+                .Where(x => IsFilterMatch(x.Path))
+                .Select(p => (string.Join('\\', p.Path.Split(@"\").Skip(3)), p.Node))
+                .ToList();
 
             var flattenedTargetPaths = new List<(string Path, WorkItemClassificationNode Node)>();
             FlattenNodes(targetPaths, ref flattenedTargetPaths);
-            flattenedTargetPaths = flattenedTargetPaths.OrderBy(s => s.Path).Select(p => (string.Join('\\', p.Path.Split(@"\").Skip(3)), p.Node)).ToList();
+            flattenedTargetPaths = flattenedTargetPaths.OrderBy(s => s.Path).Select(p => (string.Join('\\', p.Path.Split(@"\").Skip(3)), p.Node))
+                .ToList();
 
             _log.LogInformation($"{flattenedSourcePaths.Count} source nodes flattened");
             _log.LogInformation($"{flattenedTargetPaths.Count} target nodes flattened");
@@ -54,11 +58,11 @@ namespace AzureDevOpsMigrator.Migrators
             {
                 token.ThrowIfCancellationRequested();
 
-
                 // look up modified path in target
                 var existing = flattenedTargetPaths
-                    .Select(x => new { Path = x.Path, Node = x.Node})
+                    .Select(x => new { Path = x.Path, Node = x.Node })
                     .FirstOrDefault(p => p.Path.Equals(sourceNode.Path, System.StringComparison.OrdinalIgnoreCase));
+
                 if (existing == null)
                 {
                     // Create a new area path in target
@@ -71,7 +75,7 @@ namespace AzureDevOpsMigrator.Migrators
                         Attributes = sourceNode.Node.Attributes,
                         HasChildren = sourceNode.Node.HasChildren
                     }));
-                } 
+                }
                 else
                 {
                     bool changes = false;
@@ -124,6 +128,11 @@ namespace AzureDevOpsMigrator.Migrators
 
         }
 
+        protected virtual bool IsFilterMatch(string path)
+        {
+            throw new NotImplementedException("Filter match is not implemented");
+        }
+
         private void FlattenNodes(IEnumerable<WorkItemClassificationNode> nodes, ref List<(string Path, WorkItemClassificationNode Node)> paths)
         {
             foreach (var node in nodes)
@@ -146,7 +155,7 @@ namespace AzureDevOpsMigrator.Migrators
             FlattenNodes(
                 await _sourceEndpoint.GetClassificationNodes(_config.SourceEndpointConfig.ProjectName, _nodesType, token), 
                 ref paths);
-            return paths.Count;
+            return paths.Where(node => IsFilterMatch(node.Path)).Count();
         }
     }
 }

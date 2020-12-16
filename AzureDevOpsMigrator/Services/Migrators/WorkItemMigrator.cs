@@ -107,12 +107,28 @@ namespace AzureDevOpsMigrator.Migrators
 
         private string[] _fieldsNotToCopy = new string[]
         {
-            "System.Id",
-            "System.AreaId",
-            "System.TeamProject",
             "System.Rev",
+            "System.AreaId",
             "System.IterationId",
-            "System.CommentCount"
+            "System.Id",
+            "System.Parent",
+            "System.RevisedDate",
+            "System.AuthorizedAs",
+            "System.AttachedFileCount",
+            "System.TeamProject",
+            "System.NodeName",
+            "System.RelatedLinkCount",
+            // "System.WorkItemType", commenting this out for now since we need to add support for wit type changes
+            "Microsoft.VSTS.Common.StateChangeDate",
+            "System.ExternalLinkCount",
+            "System.HyperLinkCount",
+            "System.Watermark",
+            "System.AuthorizedDate",
+            "System.BoardColumn",
+            "System.BoardColumnDone",
+            "System.BoardLane",
+            "System.CommentCount",
+            "System.RemoteLinkCount"
         };
         private IEnumerable<WorkItemField> _sourceProjectFields;
 
@@ -159,6 +175,7 @@ namespace AzureDevOpsMigrator.Migrators
 
         private (WorkItem Target, int TransformationCount) _buildWorkItemRevision(WorkItem source, WorkItem target)
         {
+            target.Fields.Clear();
             target.Rev = source.Rev;
             foreach (var field in source.Fields.Where(srcField => !_fieldsNotToCopy.Contains(srcField.Key)))
             {
@@ -182,6 +199,18 @@ namespace AzureDevOpsMigrator.Migrators
                     }
                 }
             }
+
+            if (source.Fields.ContainsKey("System.ChangedDate"))
+                if (target.Fields.ContainsKey("System.ChangedDate"))
+                    target.Fields["System.ChangedDate"] = source.Fields["System.ChangedDate"];
+                else
+                    target.Fields.Add("System.ChangedDate", source.Fields["System.ChangedDate"]);
+
+            if (source.Fields.ContainsKey("System.History"))
+                if (target.Fields.ContainsKey("System.History"))
+                    target.Fields["System.History"] = source.Fields["System.History"];
+                else
+                    target.Fields.Add("System.History", source.Fields["System.History"]);
 
             var splitAreaPath = target.Fields["System.AreaPath"].ToString().Split('\\').Skip(1);
             var splitIterationPath = target.Fields["System.IterationPath"].ToString().Split('\\').Skip(1);
@@ -244,7 +273,7 @@ namespace AzureDevOpsMigrator.Migrators
             }
         }
 
-        private async Task _migrateAttachments(WorkItem source, WorkItem target, CancellationToken token)
+        private async Task _migrateAttachmentsAndLinks(WorkItem source, WorkItem target, CancellationToken token)
         {
             if (source.Relations != null && source.Relations.Count > 0)
             {
@@ -252,8 +281,8 @@ namespace AzureDevOpsMigrator.Migrators
                 {
                     target.Relations = target.Relations ?? new List<WorkItemRelation>();
 
-                    if (relation.Rel.StartsWith("System.LinkTypes") ||
-                        relation.Rel.StartsWith("Microsoft.VSTS.Common", StringComparison.OrdinalIgnoreCase))
+                    if (_config.MigrateItemRelations && (relation.Rel.StartsWith("System.LinkTypes") ||
+                        relation.Rel.StartsWith("Microsoft.VSTS.Common", StringComparison.OrdinalIgnoreCase)))
                     {
 
                         var relatedWorkItem = await _targetEndpoint.GetWorkItemByMigrationState(_targetProject.Name, _config.MigrationStateField, relation.Url, token);
@@ -283,7 +312,7 @@ namespace AzureDevOpsMigrator.Migrators
                             }
                         }
                     }
-                    else if (relation.Rel.Equals("AttachedFile", StringComparison.OrdinalIgnoreCase))
+                    else if (_config.MigrateAttachments && relation.Rel.Equals("AttachedFile", StringComparison.OrdinalIgnoreCase))
                     {
                         var fileName = relation.Attributes["name"].ToString();
                         var id = Guid.Parse(relation.Url.Split('/').Last());
@@ -320,7 +349,7 @@ namespace AzureDevOpsMigrator.Migrators
                             });
                         }
                     }
-                    else if (relation.Rel == "ArtifactLink" && relation.Url.StartsWith("vstfs:///Git/Commit/"))
+                    else if (_config.MigrateArtifactLinks && relation.Rel == "ArtifactLink" && relation.Url.StartsWith("vstfs:///Git/Commit/"))
                     {
                         var tempRelation = new WorkItemRelation()
                         {
@@ -399,21 +428,20 @@ namespace AzureDevOpsMigrator.Migrators
                         Rev = revision.Rev
                     });
 
-                    if (_config.MigrateAttachments)
-                    {
-                        await _migrateAttachments(revision, updatedTarget, token);
-                    }
+                    await _migrateAttachmentsAndLinks(revision, updatedTarget, token);
 
                     if (currentId == null && revision.Rev == 1)
                     {
                         updatedTarget = await _targetEndpoint.CreateWorkItem(_config.TargetEndpointConfig.ProjectName, updatedTarget, token, WorkItemExpand.All);
                         currentId = updatedTarget.Id;
+                        _log.LogInformation($"Work item #{sourceWorkItem.Id.Value}:{revision.Rev} has been synced (via create) to work item #{updatedTarget.Id}:{updatedTarget.Rev} with {transformCount} transformations.");
                     }
                     else
                     {
                         updatedTarget = await _targetEndpoint.UpdateWorkItem(_config.TargetEndpointConfig.ProjectName, updatedTarget, token, WorkItemExpand.All);
+                        _log.LogInformation($"Work item #{sourceWorkItem.Id.Value}:{revision.Rev} has been synced (via update) to work item #{updatedTarget.Id}:{updatedTarget.Rev} with {transformCount} transformations.");
                     }
-                    _log.LogInformation($"Work item #{sourceWorkItem.Id.Value}:{revision.Rev} has been synced to work item #{updatedTarget.Id}:{updatedTarget.Rev} with {transformCount} transformations.");
+                    
                 }
             }
             else
@@ -426,11 +454,11 @@ namespace AzureDevOpsMigrator.Migrators
 
                 if (_config.MigrateAttachments)
                 {
-                    await _migrateAttachments(mostRecent, updatedTarget, token);
+                    await _migrateAttachmentsAndLinks(mostRecent, updatedTarget, token);
                 }
 
                 updatedTarget = await _targetEndpoint.CreateWorkItem(_config.TargetEndpointConfig.ProjectName, updatedTarget, token, WorkItemExpand.All);
-                _log.LogInformation($"Work item #{sourceWorkItem.Id.Value}:{sourceWorkItem.Rev} has been synced to work item #{updatedTarget.Id}:{updatedTarget.Rev} with {transformCount} transformations.");
+                _log.LogInformation($"Work item #{sourceWorkItem.Id.Value}:{sourceWorkItem.Rev} has been synced (via create) to work item #{updatedTarget.Id}:{updatedTarget.Rev} with {transformCount} transformations.");
             }
             return updatedTarget;
         }

@@ -57,7 +57,7 @@ namespace AzureDevOpsMigrator.WPF.Pages
             {
                 CurrentCount += eventArgs.Increment;
                 Bar_Progress.Value = CurrentCount;
-                System.Diagnostics.Debug.WriteLine($"{CurrentCount}/{CurrentMax}");
+                Text_Progress.Text = ($"{CurrentCount}/{CurrentMax}");
                 Logs.Add(eventArgs);
             });
         }
