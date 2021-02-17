@@ -111,16 +111,16 @@ namespace AzureDevOpsMigrator.Migrators
                 {
                     case SyncState.Create:
                         await _targetEndpoint.UpsertClassificationNodesAsync(node.Node, _config.TargetEndpointConfig.ProjectName, _nodesType, token);
-                        _log.LogInformation($"Source: {node.Node.Path} ... Created");
+                        _log.LogInformation($"Target: {node.Node.Path} ... Created");
                         ReportCount(1, node.State, type);
                         break;
                     case SyncState.Update:
                         await _targetEndpoint.UpsertClassificationNodesAsync(node.Node, _config.TargetEndpointConfig.ProjectName, _nodesType, token);
-                        _log.LogInformation($"Source: {node.Node.Path} ... Updated");
+                        _log.LogInformation($"Target: {node.Node.Path} ... Updated");
                         ReportCount(1, node.State, type);
                         break;
                     case SyncState.Matching:
-                        _log.LogInformation($"Source: {node.Node.Path} ... In Sync");
+                        _log.LogInformation($"Target: {node.Node.Path} ... In Sync");
                         ReportCount(1, node.State, type);
                         break;
                 }
